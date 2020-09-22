@@ -6,7 +6,7 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <h3>Laravel React App</h3>
+                <h3>Laravel React Apechp</h3>
             </div>
         );
     }
