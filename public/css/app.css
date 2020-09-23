@@ -532,6 +532,11 @@ body {
   color: #FFFFFF;
 }
 
+button a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .buying {
   background-color: rgba(241, 235, 230, 0.95);
   padding-bottom: 3rem;
