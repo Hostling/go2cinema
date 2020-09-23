@@ -1,5 +1,5 @@
 require('./bootstrap');
 
-import Main from './component/Main';
+require('./component/Main');
 
 
