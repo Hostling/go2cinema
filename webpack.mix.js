@@ -12,4 +12,5 @@ const mix = require('laravel-mix');
  */
 
 mix.react('resources/js/app.js', 'public/js');
-mix.styles('resources/css/app.css', 'public/css/app.css');
+mix.styles(['resources/css/app.css', 'resources/css/normalize.css', 'resources/css/styles.css'], 'public/css/app.css');
+mix.copyDirectory('resources/i', 'public/i');
