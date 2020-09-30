@@ -32,11 +32,14 @@ class AuthController extends Controller
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
 
-            $token = $user->createToken($user->email.'-'.now());
+            return $user;
+            /*
+                $token = $user->createToken($user->email.'-'.now());
 
             return response()->json([
                 'token' => $token->accessToken
             ]);
+             */
         } else {
             return response()->json(['message' => 'Пользователь не найден!'], 404);
         }
