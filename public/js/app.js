@@ -69847,6 +69847,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _admin_Login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./admin/Login */ "./resources/js/component/admin/Login.jsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -69872,6 +69874,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Admin = /*#__PURE__*/function (_Component) {
   _inherits(Admin, _Component);
 
@@ -69884,9 +69887,14 @@ var Admin = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this);
     _this.state = {
-      auth: false
+      auth: false,
+      errorMessage: null,
+      mail: '',
+      pwd: ''
     };
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.handleChangeMail = _this.handleChangeMail.bind(_assertThisInitialized(_this));
+    _this.handleChangePass = _this.handleChangePass.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -70376,336 +70384,94 @@ var Admin = /*#__PURE__*/function (_Component) {
       }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0436\u0443 \u0431\u0438\u043B\u0435\u0442\u043E\u0432"))));
     }
   }, {
+    key: "handleChangeMail",
+    value: function handleChangeMail(e) {
+      this.setState({
+        mail: e.target.value
+      });
+    }
+  }, {
+    key: "handleChangePass",
+    value: function handleChangePass(e) {
+      this.setState({
+        pwd: e.target.value
+      });
+    }
+  }, {
     key: "handleSubmit",
     value: function handleSubmit(e) {
+      var _this2 = this;
+
       e.preventDefault();
+      var data = new FormData();
+      data.append('email', this.state.mail);
+      data.append('password', this.state.pwd);
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/api/login", data).then(function (response) {
+        return response.status !== 200 ? _this2.setState({
+          errorMessage: "Неверный логин или пароль"
+        }) : _this2.doLogin(response.data.token);
+      })["catch"](function (e) {
+        return _this2.setState({
+          errorMessage: "Неверный логин или пароль"
+        });
+      });
+    }
+  }, {
+    key: "doLogin",
+    value: function doLogin(token) {
+      localStorage.setItem('token', token);
       this.setState({
         auth: true
       });
+    }
+  }, {
+    key: "doLogout",
+    value: function doLogout() {
+      localStorage.clear();
+      this.setState({
+        auth: false
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      var token = localStorage.getItem('token');
+
+      if (token) {
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/check', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        }).then(function (response) {
+          return response.status !== 200 ? _this3.doLogout() : _this3.setState({
+            auth: true
+          });
+        })["catch"](function (e) {
+          return _this3.doLogout();
+        });
+      } else {
+        this.doLogout();
+      }
     }
   }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.auth ? this.admin() : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_admin_Login__WEBPACK_IMPORTED_MODULE_1__["default"], {
         auth: this.state.auth,
-        handleSubmit: this.handleSubmit
+        handleSubmit: this.handleSubmit,
+        handleChangeMail: this.handleChangeMail,
+        handleChangePass: this.handleChangePass,
+        errorMessage: this.state.errorMessage,
+        mail: this.state.mail,
+        pwd: this.state.pwd
       }));
     }
   }]);
 
   return Admin;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-/*
-const Admin = () => {
-    const [adminState, setAdminState] = useState({
-        auth: false,
-    });
-
-    return (
-        <main className="conf-steps">
-            <section className="conf-step">
-                <header className="conf-step__header conf-step__header_opened">
-                    <h2 className="conf-step__title">Управление залами</h2>
-                </header>
-                <div className="conf-step__wrapper">
-                    <p className="conf-step__paragraph">Доступные залы:</p>
-                    <ul className="conf-step__list">
-                        <li>Зал 1
-                            <button className="conf-step__button conf-step__button-trash"></button>
-                        </li>
-                        <li>Зал 2
-                            <button className="conf-step__button conf-step__button-trash"></button>
-                        </li>
-                    </ul>
-                    <button className="conf-step__button conf-step__button-accent">Создать зал</button>
-                </div>
-            </section>
-
-            <section className="conf-step">
-                <header className="conf-step__header conf-step__header_opened">
-                    <h2 className="conf-step__title">Конфигурация залов</h2>
-                </header>
-                <div className="conf-step__wrapper">
-                    <p className="conf-step__paragraph">Выберите зал для конфигурации:</p>
-                    <ul className="conf-step__selectors-box">
-                        <li><input type="radio" className="conf-step__radio" name="chairs-hall" value="Зал 1"
-                                   checked /><span className="conf-step__selector">Зал 1</span></li>
-                        <li><input type="radio" className="conf-step__radio" name="chairs-hall" value="Зал 2" /><span
-                            className="conf-step__selector">Зал 2</span></li>
-                    </ul>
-                    <p className="conf-step__paragraph">Укажите количество рядов и максимальное количество кресел в
-                        ряду:</p>
-                    <div className="conf-step__legend">
-                        <label className="conf-step__label">Рядов, шт<input type="text" className="conf-step__input"
-                                                                            placeholder="10" /></label>
-                        <span className="multiplier">x</span>
-                        <label className="conf-step__label">Мест, шт<input type="text" className="conf-step__input"
-                                                                           placeholder="8" /></label>
-                    </div>
-                    <p className="conf-step__paragraph">Теперь вы можете указать типы кресел на схеме зала:</p>
-                    <div className="conf-step__legend">
-                        <span className="conf-step__chair conf-step__chair_standart"></span> — обычные кресла
-                        <span className="conf-step__chair conf-step__chair_vip"></span> — VIP кресла
-                        <span className="conf-step__chair conf-step__chair_disabled"></span> — заблокированные (нет
-                        кресла)
-                        <p className="conf-step__hint">Чтобы изменить вид кресла, нажмите по нему левой кнопкой мыши</p>
-                    </div>
-
-                    <div className="conf-step__hall">
-                        <div className="conf-step__hall-wrapper">
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_disabled"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                                <span className="conf-step__chair conf-step__chair_disabled"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                                <span className="conf-step__chair conf-step__chair_disabled"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_disabled"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_disabled"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_disabled"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_vip"></span>
-                                <span className="conf-step__chair conf-step__chair_vip"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_vip"></span><span
-                                className="conf-step__chair conf-step__chair_vip"></span>
-                                <span className="conf-step__chair conf-step__chair_vip"></span><span
-                                className="conf-step__chair conf-step__chair_vip"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_vip"></span><span
-                                className="conf-step__chair conf-step__chair_vip"></span>
-                                <span className="conf-step__chair conf-step__chair_vip"></span><span
-                                className="conf-step__chair conf-step__chair_vip"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_vip"></span><span
-                                className="conf-step__chair conf-step__chair_vip"></span>
-                                <span className="conf-step__chair conf-step__chair_vip"></span><span
-                                className="conf-step__chair conf-step__chair_vip"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_disabled"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                            </div>
-
-                            <div className="conf-step__row">
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                                <span className="conf-step__chair conf-step__chair_standart"></span><span
-                                className="conf-step__chair conf-step__chair_standart"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <fieldset className="conf-step__buttons text-center">
-                        <button className="conf-step__button conf-step__button-regular">Отмена</button>
-                        <input type="submit" value="Сохранить" className="conf-step__button conf-step__button-accent" />
-                    </fieldset>
-                </div>
-            </section>
-
-            <section className="conf-step">
-                <header className="conf-step__header conf-step__header_opened">
-                    <h2 className="conf-step__title">Конфигурация цен</h2>
-                </header>
-                <div className="conf-step__wrapper">
-                    <p className="conf-step__paragraph">Выберите зал для конфигурации:</p>
-                    <ul className="conf-step__selectors-box">
-                        <li><input type="radio" className="conf-step__radio" name="prices-hall" value="Зал 1" /><span
-                            className="conf-step__selector">Зал 1</span></li>
-                        <li><input type="radio" className="conf-step__radio" name="prices-hall" value="Зал 2"
-                                   checked /><span className="conf-step__selector">Зал 2</span></li>
-                    </ul>
-
-                    <p className="conf-step__paragraph">Установите цены для типов кресел:</p>
-                    <div className="conf-step__legend">
-                        <label className="conf-step__label">Цена, рублей<input type="text" className="conf-step__input"
-                                                                               placeholder="0" /></label>
-                        за <span className="conf-step__chair conf-step__chair_standart"></span> обычные кресла
-                    </div>
-                    <div className="conf-step__legend">
-                        <label className="conf-step__label">Цена, рублей<input type="text" className="conf-step__input"
-                                                                               placeholder="0" value="350" /></label>
-                        за <span className="conf-step__chair conf-step__chair_vip"></span> VIP кресла
-                    </div>
-
-                    <fieldset className="conf-step__buttons text-center">
-                        <button className="conf-step__button conf-step__button-regular">Отмена</button>
-                        <input type="submit" value="Сохранить" className="conf-step__button conf-step__button-accent" />
-                    </fieldset>
-                </div>
-            </section>
-
-            <section className="conf-step">
-                <header className="conf-step__header conf-step__header_opened">
-                    <h2 className="conf-step__title">Сетка сеансов</h2>
-                </header>
-                <div className="conf-step__wrapper">
-                    <p className="conf-step__paragraph">
-                        <button className="conf-step__button conf-step__button-accent">Добавить фильм</button>
-                    </p>
-                    <div className="conf-step__movies">
-                        <div className="conf-step__movie">
-                            <img className="conf-step__movie-poster" alt="poster" src="i/poster.png" />
-                                <h3 className="conf-step__movie-title">Звёздные войны XXIII: Атака клонированных
-                                    клонов</h3>
-                                <p className="conf-step__movie-duration">130 минут</p>
-                        </div>
-
-                        <div className="conf-step__movie">
-                            <img className="conf-step__movie-poster" alt="poster" src="i/poster.png" />
-                                <h3 className="conf-step__movie-title">Миссия выполнима</h3>
-                                <p className="conf-step__movie-duration">120 минут</p>
-                        </div>
-
-                        <div className="conf-step__movie">
-                            <img className="conf-step__movie-poster" alt="poster" src="i/poster.png" />
-                                <h3 className="conf-step__movie-title">Серая пантера</h3>
-                                <p className="conf-step__movie-duration">90 минут</p>
-                        </div>
-
-                        <div className="conf-step__movie">
-                            <img className="conf-step__movie-poster" alt="poster" src="i/poster.png" />
-                                <h3 className="conf-step__movie-title">Движение вбок</h3>
-                                <p className="conf-step__movie-duration">95 минут</p>
-                        </div>
-
-                        <div className="conf-step__movie">
-                            <img className="conf-step__movie-poster" alt="poster" src="i/poster.png" />
-                                <h3 className="conf-step__movie-title">Кот Да Винчи</h3>
-                                <p className="conf-step__movie-duration">100 минут</p>
-                        </div>
-                    </div>
-
-                    <div className="conf-step__seances">
-                        <div className="conf-step__seances-hall">
-                            <h3 className="conf-step__seances-title">Зал 1</h3>
-                            <div className="conf-step__seances-timeline">
-                                <div className="conf-step__seances-movie"
-                                     style={{width: "60px", backgroundColor: "rgb(133, 255, 137)", left: "0"}}>
-                                    <p className="conf-step__seances-movie-title">Миссия выполнима</p>
-                                    <p className="conf-step__seances-movie-start">00:00</p>
-                                </div>
-                                <div className="conf-step__seances-movie"
-                                     style={{width: "60px", backgroundColor: "rgb(133, 255, 137)", left: "360px"}}>
-                                    <p className="conf-step__seances-movie-title">Миссия выполнима</p>
-                                    <p className="conf-step__seances-movie-start">12:00</p>
-                                </div>
-                                <div className="conf-step__seances-movie"
-                                     style={{width: "65px", backgroundColor: "rgb(202, 255, 133)", left: "420px"}}>
-                                    <p className="conf-step__seances-movie-title">Звёздные войны XXIII: Атака
-                                        клонированных клонов</p>
-                                    <p className="conf-step__seances-movie-start">14:00</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="conf-step__seances-hall">
-                            <h3 className="conf-step__seances-title">Зал 2</h3>
-                            <div className="conf-step__seances-timeline">
-                                <div className="conf-step__seances-movie"
-                                     style={{width: "65px", backgroundColor: "rgb(202, 255, 133)", left: "595px"}}>
-                                    <p className="conf-step__seances-movie-title">Звёздные войны XXIII: Атака
-                                        клонированных клонов</p>
-                                    <p className="conf-step__seances-movie-start">19:50</p>
-                                </div>
-                                <div className="conf-step__seances-movie"
-                                     style={{width: "60px", backgroundColor: "rgb(133, 255, 137)", left: "660px"}}>
-                                    <p className="conf-step__seances-movie-title">Миссия выполнима</p>
-                                    <p className="conf-step__seances-movie-start">22:00</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <fieldset className="conf-step__buttons text-center">
-                        <button className="conf-step__button conf-step__button-regular">Отмена</button>
-                        <input type="submit" value="Сохранить" className="conf-step__button conf-step__button-accent" />
-                    </fieldset>
-                </div>
-            </section>
-
-            <section className="conf-step">
-                <header className="conf-step__header conf-step__header_opened">
-                    <h2 className="conf-step__title">Открыть продажи</h2>
-                </header>
-                <div className="conf-step__wrapper text-center">
-                    <p className="conf-step__paragraph">Всё готово, теперь можно:</p>
-                    <button className="conf-step__button conf-step__button-accent">Открыть продажу билетов</button>
-                </div>
-            </section>
-        </main>
-    );
-};
-*/
-
 
 /* harmony default export */ __webpack_exports__["default"] = (Admin);
 
@@ -71455,45 +71221,23 @@ var Ticket = function Ticket() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 
 
 var Login = function Login(_ref) {
   var auth = _ref.auth,
-      handleSubmit = _ref.handleSubmit;
-
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(_defineProperty({}, name, value)),
-      _useState2 = _slicedToArray(_useState, 2),
-      value = _useState2[0],
-      setValue = _useState2[1];
-
-  var handleChange = function handleChange(e) {
-    var name = e.target.name;
-    setValue({
-      name: e.target.value
-    });
-  };
-
+      handleSubmit = _ref.handleSubmit,
+      errorMessage = _ref.errorMessage,
+      handleChangeMail = _ref.handleChangeMail,
+      handleChangePass = _ref.handleChangePass,
+      mail = _ref.mail,
+      pwd = _ref.pwd;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "login"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
     className: "login__header"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "login__title"
-  }, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, errorMessage), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "login__wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     className: "login__form",
@@ -71508,8 +71252,8 @@ var Login = function Login(_ref) {
     type: "mail",
     placeholder: "example@domain.xyz",
     name: "mail",
-    value: value.value,
-    onChange: handleChange,
+    value: mail,
+    onChange: handleChangeMail,
     required: true
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     className: "login__label",
@@ -71519,8 +71263,8 @@ var Login = function Login(_ref) {
     type: "password",
     placeholder: "",
     name: "pwd",
-    value: value.value,
-    onChange: handleChange,
+    value: pwd,
+    onChange: handleChangePass,
     required: true
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "text-center"

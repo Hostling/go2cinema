@@ -1,19 +1,13 @@
 import React, {useState} from 'react';
 
-const Login = ({auth, handleSubmit}) => {
-    const [value, setValue] = useState({[name]: value});
-
-    const handleChange = (e) => {
-        const name = e.target.name;
-        setValue({name: e.target.value});
-    }
-
+const Login = ({auth, handleSubmit, errorMessage, handleChangeMail, handleChangePass, mail, pwd}) => {
     return (
         <main>
             <section className="login">
                 <header className="login__header">
                     <h2 className="login__title">Авторизация</h2>
                 </header>
+                <span>{errorMessage}</span>
                 <div className="login__wrapper">
                     <form className="login__form" onSubmit={handleSubmit} method="get" acceptCharset="utf-8">
                         <label className="login__label" htmlFor="mail">
@@ -23,8 +17,8 @@ const Login = ({auth, handleSubmit}) => {
                                 type="mail"
                                 placeholder="example@domain.xyz"
                                 name="mail"
-                                value={value.value}
-                                onChange={handleChange}
+                                value={mail}
+                                onChange={handleChangeMail}
                                 required
                             />
                         </label>
@@ -35,8 +29,8 @@ const Login = ({auth, handleSubmit}) => {
                                 type="password"
                                 placeholder=""
                                 name="pwd"
-                                value={value.value}
-                                onChange={handleChange}
+                                value={pwd}
+                                onChange={handleChangePass}
                                 required
                             />
                         </label>
