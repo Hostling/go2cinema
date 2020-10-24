@@ -35698,6 +35698,152 @@ var index = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext || create
 
 /***/ }),
 
+/***/ "./node_modules/nanoid/index.browser.js":
+/*!**********************************************!*\
+  !*** ./node_modules/nanoid/index.browser.js ***!
+  \**********************************************/
+/*! exports provided: nanoid, customAlphabet, customRandom, urlAlphabet, random */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "nanoid", function() { return nanoid; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "customAlphabet", function() { return customAlphabet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "customRandom", function() { return customRandom; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "random", function() { return random; });
+/* harmony import */ var _url_alphabet_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./url-alphabet/index.js */ "./node_modules/nanoid/url-alphabet/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "urlAlphabet", function() { return _url_alphabet_index_js__WEBPACK_IMPORTED_MODULE_0__["urlAlphabet"]; });
+
+// This file replaces `index.js` in bundlers like webpack or Rollup,
+// according to `browser` config in `package.json`.
+
+
+
+if (true) {
+  // All bundlers will remove this block in the production bundle.
+  if (
+    typeof navigator !== 'undefined' &&
+    navigator.product === 'ReactNative' &&
+    typeof crypto === 'undefined'
+  ) {
+    throw new Error(
+      'React Native does not have a built-in secure random generator. ' +
+        'If you don’t need unpredictable IDs use `nanoid/non-secure`. ' +
+        'For secure IDs, import `react-native-get-random-values` ' +
+        'before Nano ID. If you use Expo, install `expo-random` ' +
+        'and use `nanoid/async`.'
+    )
+  }
+  if (typeof msCrypto !== 'undefined' && typeof crypto === 'undefined') {
+    throw new Error(
+      'Import file with `if (!window.crypto) window.crypto = window.msCrypto`' +
+        ' before importing Nano ID to fix IE 11 support'
+    )
+  }
+  if (typeof crypto === 'undefined') {
+    throw new Error(
+      'Your browser does not have secure random generator. ' +
+        'If you don’t need unpredictable IDs, you can use nanoid/non-secure.'
+    )
+  }
+}
+
+let random = bytes => crypto.getRandomValues(new Uint8Array(bytes))
+
+let customRandom = (alphabet, size, getRandom) => {
+  // First, a bitmask is necessary to generate the ID. The bitmask makes bytes
+  // values closer to the alphabet size. The bitmask calculates the closest
+  // `2^31 - 1` number, which exceeds the alphabet size.
+  // For example, the bitmask for the alphabet size 30 is 31 (00011111).
+  // `Math.clz32` is not used, because it is not available in browsers.
+  let mask = (2 << (Math.log(alphabet.length - 1) / Math.LN2)) - 1
+  // Though, the bitmask solution is not perfect since the bytes exceeding
+  // the alphabet size are refused. Therefore, to reliably generate the ID,
+  // the random bytes redundancy has to be satisfied.
+
+  // Note: every hardware random generator call is performance expensive,
+  // because the system call for entropy collection takes a lot of time.
+  // So, to avoid additional system calls, extra bytes are requested in advance.
+
+  // Next, a step determines how many random bytes to generate.
+  // The number of random bytes gets decided upon the ID size, mask,
+  // alphabet size, and magic number 1.6 (using 1.6 peaks at performance
+  // according to benchmarks).
+
+  // `-~f => Math.ceil(f)` if f is a float
+  // `-~i => i + 1` if i is an integer
+  let step = -~((1.6 * mask * size) / alphabet.length)
+
+  return () => {
+    let id = ''
+    while (true) {
+      let bytes = getRandom(step)
+      // A compact alternative for `for (var i = 0; i < step; i++)`.
+      let j = step
+      while (j--) {
+        // Adding `|| ''` refuses a random byte that exceeds the alphabet size.
+        id += alphabet[bytes[j] & mask] || ''
+        // `id.length + 1 === size` is a more compact option.
+        if (id.length === +size) return id
+      }
+    }
+  }
+}
+
+let customAlphabet = (alphabet, size) => customRandom(alphabet, size, random)
+
+let nanoid = (size = 21) => {
+  let id = ''
+  let bytes = crypto.getRandomValues(new Uint8Array(size))
+
+  // A compact alternative for `for (var i = 0; i < step; i++)`.
+  while (size--) {
+    // It is incorrect to use bytes exceeding the alphabet size.
+    // The following mask reduces the random byte in the 0-255 value
+    // range to the 0-63 value range. Therefore, adding hacks, such
+    // as empty string fallback or magic numbers, is unneccessary because
+    // the bitmask trims bytes down to the alphabet size.
+    let byte = bytes[size] & 63
+    if (byte < 36) {
+      // `0-9a-z`
+      id += byte.toString(36)
+    } else if (byte < 62) {
+      // `A-Z`
+      id += (byte - 26).toString(36).toUpperCase()
+    } else if (byte < 63) {
+      id += '_'
+    } else {
+      id += '-'
+    }
+  }
+  return id
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/nanoid/url-alphabet/index.js":
+/*!***************************************************!*\
+  !*** ./node_modules/nanoid/url-alphabet/index.js ***!
+  \***************************************************/
+/*! exports provided: urlAlphabet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "urlAlphabet", function() { return urlAlphabet; });
+// This alphabet uses `A-Za-z0-9_-` symbols. The genetic algorithm helped
+// optimize the gzip compression for this alphabet.
+let urlAlphabet =
+  'ModuleSymbhasOwnPr-0123456789ABCDEFGHNRVfgctiUvz_KqYTJkLxpZXIjQW'
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/object-assign/index.js":
 /*!*********************************************!*\
   !*** ./node_modules/object-assign/index.js ***!
@@ -70489,37 +70635,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! nanoid */ "./node_modules/nanoid/index.browser.js");
 
 
 
-var Hall = function Hall() {
+
+var Hall = function Hall(props) {
+  var times = props[1];
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "movie-seances__hall"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
     className: "movie-seances__hall-title"
-  }, "\u0417\u0430\u043B 1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+  }, "\u0417\u0430\u043B ", props[0]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
     className: "movie-seances__list"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "movie-seances__time-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "movie-seances__time",
-    href: "hall.html"
-  }, "10:20")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "movie-seances__time-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "movie-seances__time",
-    to: "/hall"
-  }, "14:10")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "movie-seances__time-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "movie-seances__time",
-    to: "/hall"
-  }, "18:40")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "movie-seances__time-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "movie-seances__time",
-    to: "/hall"
-  }, "22:00"))));
+  }, times.map(function (item) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      key: Object(nanoid__WEBPACK_IMPORTED_MODULE_2__["nanoid"])(),
+      className: "movie-seances__time-block"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      className: "movie-seances__time",
+      to: "/hall"
+    }, item));
+  })));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Hall);
@@ -70897,7 +71034,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Header */ "./resources/js/component/Header.jsx");
 /* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Nav */ "./resources/js/component/Nav.jsx");
-/* harmony import */ var _Movie__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Movie */ "./resources/js/component/Movie.jsx");
+/* harmony import */ var _Movies__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Movies */ "./resources/js/component/Movies.jsx");
 /* harmony import */ var _HallPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./HallPage */ "./resources/js/component/HallPage.jsx");
 /* harmony import */ var _Admin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Admin */ "./resources/js/component/Admin.jsx");
 /* harmony import */ var _Payment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Payment */ "./resources/js/component/Payment.jsx");
@@ -70964,7 +71101,7 @@ var Main = /*#__PURE__*/function (_Component) {
         component: _Admin__WEBPACK_IMPORTED_MODULE_6__["default"]
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
         path: "/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Nav__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Movie__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Movie__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Movie__WEBPACK_IMPORTED_MODULE_4__["default"], null))))));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Nav__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Movies__WEBPACK_IMPORTED_MODULE_4__["default"], null))))));
     }
   }]);
 
@@ -70998,10 +71135,55 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Hall__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Hall */ "./resources/js/component/Hall.jsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! nanoid */ "./node_modules/nanoid/index.browser.js");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Movie = function Movie() {
+
+
+
+var Movie = function Movie(props) {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      info = _useState2[0],
+      setInfo = _useState2[1];
+
+  var filmId = props[0];
+  var halls = {};
+  var temp = props[1].filter(function (item) {
+    return Number(item.film) === Number(filmId);
+  }).forEach(function (item) {
+    if (halls[item.hall] !== undefined) {
+      halls[item.hall].push(item.time);
+    } else {
+      halls[item.hall] = [item.time];
+    }
+  });
+
+  var getFilmInfo = function getFilmInfo() {
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/cinema/filminfo/' + filmId).then(function (response) {
+      return setInfo(response.data[0]);
+    });
+  };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    getFilmInfo();
+  }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "movie"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -71010,24 +71192,86 @@ var Movie = function Movie() {
     className: "movie__poster"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "movie__poster-image",
-    alt: "\u0417\u0432\u0451\u0437\u0434\u043D\u044B\u0435 \u0432\u043E\u0439\u043D\u044B \u043F\u043E\u0441\u0442\u0435\u0440",
-    src: "i/poster1.jpg"
+    alt: info.name,
+    src: info.poster
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "movie__description"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "movie__title"
-  }, "\u0417\u0432\u0451\u0437\u0434\u043D\u044B\u0435 \u0432\u043E\u0439\u043D\u044B XXIII: \u0410\u0442\u0430\u043A\u0430 \u043A\u043B\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0445 \u043A\u043B\u043E\u043D\u043E\u0432"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, info.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "movie__synopsis"
-  }, "\u0414\u0432\u0435 \u0441\u043E\u0442\u043D\u0438 \u043B\u0435\u0442 \u043D\u0430\u0437\u0430\u0434 \u043C\u0430\u043B\u043E\u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0435 \u0445\u0443\u0442\u043E\u0440\u0430 \u0440\u0430\u0437\u043E\u0440\u044F\u043B\u0430 \u0448\u0430\u0439\u043A\u0430 \u043D\u0435\u0445\u0440\u0438\u0441\u0442\u0435\u0439-\u043B\u044F\u0445\u043E\u0432 \u0432\u043E \u0433\u043B\u0430\u0432\u0435 \u0441 \u043C\u043E\u0433\u0443\u0449\u0435\u0441\u0442\u0432\u0435\u043D\u043D\u044B\u043C \u043A\u043E\u043B\u0434\u0443\u043D\u043E\u043C."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, info.description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "movie__data"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "movie__data-duration"
-  }, "130 \u043C\u0438\u043D\u0443\u0442"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, info.duration, " \u043C\u0438\u043D\u0443\u0442"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "movie__data-origin"
-  }, "\u0421\u0428\u0410")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hall__WEBPACK_IMPORTED_MODULE_1__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hall__WEBPACK_IMPORTED_MODULE_1__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hall__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, info.country)))), Object.entries(halls).map(function (item) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hall__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({
+      key: Object(nanoid__WEBPACK_IMPORTED_MODULE_3__["nanoid"])()
+    }, item));
+  }));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Movie);
+
+/***/ }),
+
+/***/ "./resources/js/component/Movies.jsx":
+/*!*******************************************!*\
+  !*** ./resources/js/component/Movies.jsx ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Movie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Movie */ "./resources/js/component/Movie.jsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+var Movies = function Movies() {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      movies = _useState2[0],
+      setMovies = _useState2[1];
+
+  var getTodayFilms = function getTodayFilms(year, month, day) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/cinema/films/' + year + '/' + month + '/' + day).then(function (response) {
+      return setMovies(response.data);
+    });
+  };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    getTodayFilms(2020, 10, 30);
+  }, []);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, Object.entries(movies).map(function (movie) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Movie__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({
+      key: movie[0]
+    }, movie));
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Movies);
 
 /***/ }),
 

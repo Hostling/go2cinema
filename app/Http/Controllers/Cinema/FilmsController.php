@@ -20,6 +20,7 @@ class FilmsController extends Controller
 
         foreach ($grid as $item) {
             $result[$item->film][] = [
+                'film' => $item->film,
                 'hall' => $item->hall,
                 'time' => $item->time,
             ];

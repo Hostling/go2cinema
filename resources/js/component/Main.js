@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header';
 import Nav from './Nav';
-import Movie from './Movie';
+import Movies from './Movies';
 import HallPage from './HallPage';
 import Admin from './Admin';
 import Payment from "./Payment";
@@ -23,9 +23,7 @@ class Main extends Component {
                         <Route path="/">
                             <Nav />
                             <main>
-                                <Movie />
-                                <Movie />
-                                <Movie />
+                                <Movies />
                             </main>
                         </Route>
                     </Switch>

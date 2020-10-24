@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
             ],[
                 'name' => 'Хищник',
                 'description' => 'Самые опасные хищники Вселенной, прибыв из глубин космоса, высаживаются на улицах маленького городка, чтобы начать свою кровавую охоту. Генетически модернизировав себя с помощью ДНК других видов, охотники стали ещё сильнее, умнее и беспощаднее.',
-                'poster' => 'i/poster2.jpg',
+                'poster' => 'i/poster1.jpg',
                 'country' => 'Канада, США',
                 'duration' => 101,
             ],
@@ -72,6 +72,9 @@ class DatabaseSeeder extends Seeder
 
         DB::table('grid')->insertOrIgnore([
             ['hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '9:00', 'film' => 1],
+            ['hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '16:00', 'film' => 1],
+            ['hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '18:00', 'film' => 1],
+            ['hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '3:00', 'film' => 1],
             ['hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '11:00', 'film' => 2],
             ['hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '14:00', 'film' => 3],
             ['hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '16:30', 'film' => 2],
