@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Cinema\FilmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,8 @@ use App\Http\Controllers\AuthController;
 */
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('cinema/films/{year}/{month}/{day}', [FilmsController::class, 'getFilmsByDay']);
+Route::get('cinema/filminfo/{id}', [FilmsController::class, 'filmInfo']);
 
 Route::middleware('auth:api')->group(function() {
     Route::get('check', [AuthController::class, 'check']);
