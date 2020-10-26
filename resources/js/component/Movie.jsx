@@ -10,11 +10,13 @@ const Movie = (props) => {
     const temp = props[1]
         .filter(item => Number(item.film) === Number(filmId))
         .forEach(item => {
-            if(halls[item.hall] !== undefined) {
-                halls[item.hall].push(item.time);
-            } else {
-                halls[item.hall] = [item.time];
-            }
+            if(halls[item.hall] === undefined) halls[item.hall] = [];
+            halls[item.hall].push({
+                gridId: item.gridId,
+                time: item.time,
+                name: info.name,
+                hall: item.hall,
+            });
         });
 
     const getFilmInfo = () => {

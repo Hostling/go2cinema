@@ -1,15 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import {nanoid} from "nanoid";
 
-const HallPage = () => {
+const HallPage = (props) => {
+    let seats = [];
+    let hall = [];
+
+    const [rows, setRows] = useState([]);
+    const params = props.location.state;
+
+    useEffect(() => getInfo(), []);
+
+    const getInfo = () => {
+        axios.get( '/api/cinema/sessioninfo/' + params.gridId)
+            .then(response => seats = response.data)
+            .then(() => {
+                axios.get('/api/cinema/getHallInfo/' + params.hall)
+                    .then(resp => hall = resp.data)
+                    .then(() => setRows(makeRows()));
+            });
+    }
+
+    const makeRows = () => {
+        const rowsCount = hall[0].rows;
+        const columnsCount = hall[0].columns;
+        let temp = [];
+        for(let i = 1; i <= rowsCount;i++) {
+            for(let k = 1; k <= columnsCount;k++) {
+                let id = (columnsCount * i) - (columnsCount - k);
+                let a = {
+                    id: id,
+                    column: k,
+                    type: seats[id - 1].type,
+                };
+                if(temp[i] === undefined) temp[i] = [];
+                temp[i].push(a);
+            }
+        }
+        return temp;
+    }
+
     return (
         <main>
             <section className="buying">
                 <div className="buying__info">
                     <div className="buying__info-description">
-                        <h2 className="buying__info-title">Звёздные войны XXIII: Атака клонированных клонов</h2>
-                        <p className="buying__info-start">Начало сеанса: 18:30</p>
-                        <p className="buying__info-hall">Зал 1</p>
+                        <h2 className="buying__info-title">{params.name}</h2>
+                        <p className="buying__info-start">Начало сеанса: {params.time}</p>
+                        <p className="buying__info-hall">Зал {params.hall}</p>
                     </div>
                     <div className="buying__info-hint">
                         <p>Тапните дважды,<br />чтобы увеличить</p>
@@ -17,155 +55,13 @@ const HallPage = () => {
                 </div>
                 <div className="buying-scheme">
                     <div className="buying-scheme__wrapper">
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_taken"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_vip"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_vip"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_vip"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_vip"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_vip"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_vip"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_vip"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_taken"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_vip"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_taken"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_vip"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_selected"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_selected"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_disabled"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_disabled"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                        </div>
-
-                        <div className="buying-scheme__row">
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_taken"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_taken"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                            <span className="buying-scheme__chair buying-scheme__chair_standart"></span><span
-                            className="buying-scheme__chair buying-scheme__chair_standart"></span>
-                        </div>
+                        {rows.map(item => (
+                            <div className="buying-scheme__row" key={nanoid()}>
+                                {item.map(elem => (
+                                    <span className={'buying-scheme__chair buying-scheme__chair_' + elem.type} key={elem.id}></span>
+                                ))}
+                            </div>
+                        ))}
                     </div>
                     <div className="buying-scheme__legend">
                         <div className="col">

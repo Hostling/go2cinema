@@ -17,6 +17,7 @@ class CreateSeatTable extends Migration
             $table->id();
             $table->integer('idInHall');
             $table->integer('hall');
+            $table->integer('gridId');
             $table->string('type');
             $table->timestamps();
         });

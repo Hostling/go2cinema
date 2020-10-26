@@ -14,12 +14,13 @@ class FilmsController extends Controller
             ->where('year', $year)
             ->where('month', $month)
             ->where('day', $day)
-            ->select('hall', 'time', 'film')
+            ->select('id', 'hall', 'time', 'film')
             ->get();
         $result = [];
 
         foreach ($grid as $item) {
             $result[$item->film][] = [
+                'gridId' => $item->id,
                 'film' => $item->film,
                 'hall' => $item->hall,
                 'time' => $item->time,
@@ -33,5 +34,19 @@ class FilmsController extends Controller
             ->where('id', $id)
             ->get();
         return $film;
+    }
+
+    public function getSessionInfo($gridId) {
+        $seats = DB::table('seat')
+            ->where('gridId', $gridId)
+            ->get();
+        return $seats;
+    }
+
+    public function getHallInfo($hallId) {
+        $hall = DB::table('hall')
+            ->where('id', $hallId)
+            ->get();
+        return $hall;
     }
 }

@@ -17,8 +17,11 @@ use App\Http\Controllers\Cinema\FilmsController;
 */
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+
 Route::get('cinema/films/{year}/{month}/{day}', [FilmsController::class, 'getFilmsByDay']);
 Route::get('cinema/filminfo/{id}', [FilmsController::class, 'filmInfo']);
+Route::get('cinema/sessioninfo/{id}', [FilmsController::class, 'getSessionInfo']);
+Route::get('cinema/getHallInfo/{id}', [FilmsController::class, 'getHallInfo']);
 
 Route::middleware('auth:api')->group(function() {
     Route::get('check', [AuthController::class, 'check']);

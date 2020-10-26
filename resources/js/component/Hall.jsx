@@ -11,7 +11,10 @@ const Hall = (props) => {
             <ul className="movie-seances__list">
                 {times.map(item => (
                     <li key={nanoid()} className="movie-seances__time-block">
-                        <Link className="movie-seances__time" to="/hall">{item}</Link>
+                        <Link className="movie-seances__time" to={{
+                            pathname: "/hall",
+                            state: item,
+                        }}>{item.time}</Link>
                     </li>
                 ))}
             </ul>
