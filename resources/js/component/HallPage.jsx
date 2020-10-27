@@ -35,6 +35,8 @@ const HallPage = (props) => {
             case("buying-scheme__chair buying-scheme__chair_vip"):
                 setTotal(prevState => prevState + hall.priceVip);
                 break;
+            default:
+                return;
         }
         let id = e.target.dataset.id;
         setSelected(prevState => ([...prevState, id]));
@@ -122,6 +124,7 @@ const HallPage = (props) => {
                         name: params.name,
                         hall: params.hall,
                         time: params.time,
+                        gridId: params.gridId,
                         price: total,
                         selected,
                     }

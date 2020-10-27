@@ -22,7 +22,10 @@ const Payment = (props) => {
                         className="ticket__details ticket__cost">{params.price}</span> рублей</p>
 
                     <button className="acceptin-button">
-                        <Link to="/ticket">Получить код бронирования</Link>
+                        <Link to={{
+                            pathname: "/ticket",
+                            state: params,
+                        }}>Получить код бронирования</Link>
                     </button>
 
                     <p className="ticket__hint">После оплаты билет будет доступен в этом окне, а также придёт вам на

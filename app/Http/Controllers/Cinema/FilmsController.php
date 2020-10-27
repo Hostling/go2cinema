@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Cinema;
 
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class FilmsController extends Controller
 {
@@ -48,5 +50,30 @@ class FilmsController extends Controller
             ->where('id', $hallId)
             ->get();
         return $hall;
+    }
+
+    public function generateQR(Request $request) {
+        $ticket = 'Фильм: '. $request->name
+            . '|Места: '. $request->seats
+            . '|Зал: '. $request->hall
+            . '|Сеанс: '. $request->time
+            . '|Стоимость: '. $request->price
+            . '|Сеанс '. $request->sess;
+        $qr = QrCode::format('png')->encoding('UTF-8')->generate($ticket);
+        return base64_encode($qr);
+    }
+
+    public function booking(Request $request) {
+        $selected = explode(',', $request->selected);
+        DB::table('seat')
+            ->where('gridId', $request->gridId)
+            ->whereIn('idInHall', $selected)
+            ->update(['type' => 'taken']);
+
+        return DB::table('seat')
+            ->where('gridId', $request->gridId)
+            ->whereIn('idInHall', $selected)
+            ->get();
+
     }
 }

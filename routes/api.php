@@ -22,6 +22,8 @@ Route::get('cinema/films/{year}/{month}/{day}', [FilmsController::class, 'getFil
 Route::get('cinema/filminfo/{id}', [FilmsController::class, 'filmInfo']);
 Route::get('cinema/sessioninfo/{id}', [FilmsController::class, 'getSessionInfo']);
 Route::get('cinema/getHallInfo/{id}', [FilmsController::class, 'getHallInfo']);
+Route::post('cinema/qr', [FilmsController::class, 'generateQR']);
+Route::post('cinema/booking', [FilmsController::class, 'booking']);
 
 Route::middleware('auth:api')->group(function() {
     Route::get('check', [AuthController::class, 'check']);
