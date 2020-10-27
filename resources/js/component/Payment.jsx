@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 
-const Payment = () => {
+const Payment = (props) => {
+    const params = props.location.state;
     return (
         <main>
             <section className="ticket">
@@ -11,14 +12,14 @@ const Payment = () => {
                 </header>
 
                 <div className="ticket__info-wrapper">
-                    <p className="ticket__info">На фильм: <span className="ticket__details ticket__title">Звёздные войны XXIII: Атака клонированных клонов</span>
+                    <p className="ticket__info">На фильм: <span className="ticket__details ticket__title">{params.name}</span>
                     </p>
-                    <p className="ticket__info">Места: <span className="ticket__details ticket__chairs">6, 7</span></p>
-                    <p className="ticket__info">В зале: <span className="ticket__details ticket__hall">1</span></p>
+                    <p className="ticket__info">Места: <span className="ticket__details ticket__chairs">{params.selected.toString()}</span></p>
+                    <p className="ticket__info">В зале: <span className="ticket__details ticket__hall">{params.hall}</span></p>
                     <p className="ticket__info">Начало сеанса: <span
-                        className="ticket__details ticket__start">18:30</span></p>
+                        className="ticket__details ticket__start">{params.time}</span></p>
                     <p className="ticket__info">Стоимость: <span
-                        className="ticket__details ticket__cost">600</span> рублей</p>
+                        className="ticket__details ticket__cost">{params.price}</span> рублей</p>
 
                     <button className="acceptin-button">
                         <Link to="/ticket">Получить код бронирования</Link>
