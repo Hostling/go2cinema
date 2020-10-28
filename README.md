@@ -4,6 +4,8 @@
 
 Развернуто на Heroku: https://go2cinemabackend.herokuapp.com/
 
+Для генерации QR кодов необходима php библиотека Imagick
+
 ### После разворачивания выполнить команды:
 
 1) Генерация ключей laravel: php artisan passport:key

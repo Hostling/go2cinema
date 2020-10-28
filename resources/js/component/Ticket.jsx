@@ -6,21 +6,20 @@ const Ticket = (props) => {
     const [qr, setQr] = useState(['data:image/png;base64, ']);
 
     useEffect(() => {
-        axios.post('/api/cinema/qr', {
-            name: params.name,
-            seats: params.selected.toString(),
-            hall: params.hall,
-            time: params.time,
-            price: params.price,
-            sess: params.gridId,
+        axios.post('/api/cinema/booking', {
+            gridId: params.gridId,
+            selected: params.selected.toString(),
         })
-            .then(response => setQr(prevState => prevState + response.data))
             .then(() => {
-                axios.post('/api/cinema/booking', {
-                    gridId: params.gridId,
-                    selected: params.selected.toString(),
+                axios.post('/api/cinema/qr', {
+                    name: params.name,
+                    seats: params.selected.toString(),
+                    hall: params.hall,
+                    time: params.time,
+                    price: params.price,
+                    sess: params.gridId,
                 })
-                    .then(response => console.log(response));
+                    .then(response => setQr(prevState => prevState + response.data))
             })
     }, []);
 
