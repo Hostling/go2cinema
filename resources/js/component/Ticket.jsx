@@ -10,6 +10,7 @@ const Ticket = (props) => {
             gridId: params.gridId,
             selected: params.selected.toString(),
         })
+            .then(response => console.log(response.data))
             .then(() => {
                 axios.post('/api/cinema/qr', {
                     name: params.name,
