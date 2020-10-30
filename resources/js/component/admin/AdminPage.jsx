@@ -41,7 +41,7 @@ const AdminPage = () => {
                     popupHandler={toggleAddHallPopup}
                     popupDeleteHall={toggleDeleteHallPopup}
                 />
-                <HallConfig />
+                <HallConfig halls={halls} />
                 <PriceConfig />
                 <SessionsConfig />
                 <OpenSales />

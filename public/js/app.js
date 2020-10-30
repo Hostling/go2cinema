@@ -71835,7 +71835,9 @@ var AdminPage = function AdminPage() {
     halls: halls,
     popupHandler: toggleAddHallPopup,
     popupDeleteHall: toggleDeleteHallPopup
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HallConfig__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PriceConfig__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SessionsConfig__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OpenSales__WEBPACK_IMPORTED_MODULE_5__["default"], null)));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HallConfig__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    halls: halls
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PriceConfig__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SessionsConfig__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OpenSales__WEBPACK_IMPORTED_MODULE_5__["default"], null)));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (AdminPage);
@@ -71853,9 +71855,116 @@ var AdminPage = function AdminPage() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! nanoid */ "./node_modules/nanoid/index.browser.js");
+/* harmony import */ var _Seat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Seat */ "./resources/js/component/admin/Seat.jsx");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-var HallConfig = function HallConfig() {
+
+
+
+var HallConfig = function HallConfig(_ref) {
+  var halls = _ref.halls;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+    id: 1,
+    rows: 10,
+    columns: 8,
+    seats: []
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      activeHallConfig = _useState2[0],
+      setActiveHallConfig = _useState2[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    axios.get("/api/getSeatsConfig/" + activeHallConfig.id, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(function (response) {
+      var rowsCount = activeHallConfig.rows;
+      var columnsCount = activeHallConfig.columns;
+      var temp = [];
+
+      for (var i = 1; i <= rowsCount; i++) {
+        for (var k = 1; k <= columnsCount; k++) {
+          var id = columnsCount * i - (columnsCount - k);
+          var a = {
+            id: id,
+            row: i,
+            column: k,
+            type: response.data[id - 1].type
+          };
+          if (temp[i] === undefined) temp[i] = [];
+          temp[i].push(a);
+        }
+      }
+
+      return temp;
+    }).then(function (response) {
+      setActiveHallConfig(function (prevState) {
+        return _objectSpread(_objectSpread({}, prevState), {}, {
+          seats: response
+        });
+      });
+    });
+  }, []);
+
+  var handleSeatClick = function handleSeatClick(e) {
+    var newSeats = editSeats(activeHallConfig.seats, e.target.dataset);
+    setActiveHallConfig(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        seats: newSeats
+      });
+    });
+  };
+
+  var handleSaveSeats = function handleSaveSeats() {
+    axios.post('/api/saveSeats', activeHallConfig, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(function (response) {
+      return console.log(response.data);
+    });
+  };
+
+  var editSeats = function editSeats(prev, data) {
+    var newType = "";
+
+    switch (data.type) {
+      case "standart":
+        newType = "vip";
+        break;
+
+      case "vip":
+        newType = "disabled";
+        break;
+
+      default:
+        newType = "standart";
+    }
+
+    prev[data.row][data.column - 1].type = newType;
+    return prev;
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
@@ -71868,22 +71977,19 @@ var HallConfig = function HallConfig() {
     className: "conf-step__paragraph"
   }, "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0437\u0430\u043B \u0434\u043B\u044F \u043A\u043E\u043D\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0438:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
     className: "conf-step__selectors-box"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "radio",
-    className: "conf-step__radio",
-    name: "chairs-hall",
-    value: "\u0417\u0430\u043B 1",
-    defaultChecked: true
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__selector"
-  }, "\u0417\u0430\u043B 1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "radio",
-    className: "conf-step__radio",
-    name: "chairs-hall",
-    value: "\u0417\u0430\u043B 2"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__selector"
-  }, "\u0417\u0430\u043B 2"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, halls.map(function (hall) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      key: Object(nanoid__WEBPACK_IMPORTED_MODULE_1__["nanoid"])()
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "radio",
+      className: "conf-step__radio",
+      name: "chairs-hall",
+      value: "Зал " + hall.id,
+      defaultChecked: hall.id === activeHallConfig.id
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "conf-step__selector"
+    }, "\u0417\u0430\u043B ", hall.id));
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "conf-step__paragraph"
   }, "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0440\u044F\u0434\u043E\u0432 \u0438 \u043C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u043E\u0435 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u043A\u0440\u0435\u0441\u0435\u043B \u0432 \u0440\u044F\u0434\u0443:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "conf-step__legend"
@@ -71892,7 +71998,8 @@ var HallConfig = function HallConfig() {
   }, "\u0420\u044F\u0434\u043E\u0432, \u0448\u0442", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
     className: "conf-step__input",
-    placeholder: "10"
+    placeholder: activeHallConfig.rows,
+    value: activeHallConfig.rows
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "multiplier"
   }, "x"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -71900,7 +72007,8 @@ var HallConfig = function HallConfig() {
   }, "\u041C\u0435\u0441\u0442, \u0448\u0442", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
     className: "conf-step__input",
-    placeholder: "8"
+    placeholder: activeHallConfig.columns,
+    value: activeHallConfig.columns
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "conf-step__paragraph"
   }, "\u0422\u0435\u043F\u0435\u0440\u044C \u0432\u044B \u043C\u043E\u0436\u0435\u0442\u0435 \u0443\u043A\u0430\u0437\u0430\u0442\u044C \u0442\u0438\u043F\u044B \u043A\u0440\u0435\u0441\u0435\u043B \u043D\u0430 \u0441\u0445\u0435\u043C\u0435 \u0437\u0430\u043B\u0430:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -71917,194 +72025,29 @@ var HallConfig = function HallConfig() {
     className: "conf-step__hall"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "conf-step__hall-wrapper"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_vip"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_disabled"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "conf-step__row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__chair conf-step__chair_standart"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", {
+  }, activeHallConfig.seats.map(function (row) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "conf-step__row",
+      key: Object(nanoid__WEBPACK_IMPORTED_MODULE_1__["nanoid"])()
+    }, row.map(function (elem) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Seat__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        key: elem.id,
+        id: elem.id,
+        type: elem.type,
+        row: elem.row,
+        column: elem.column,
+        handleClick: handleSeatClick
+      });
+    }));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", {
     className: "conf-step__buttons text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "conf-step__button conf-step__button-regular"
   }, "\u041E\u0442\u043C\u0435\u043D\u0430"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "submit",
     value: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C",
-    className: "conf-step__button conf-step__button-accent"
+    className: "conf-step__button conf-step__button-accent",
+    onClick: handleSaveSeats
   }))));
 };
 
@@ -72513,6 +72456,39 @@ var PriceConfig = function PriceConfig() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (PriceConfig);
+
+/***/ }),
+
+/***/ "./resources/js/component/admin/Seat.jsx":
+/*!***********************************************!*\
+  !*** ./resources/js/component/admin/Seat.jsx ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var Seat = function Seat(_ref) {
+  var id = _ref.id,
+      type = _ref.type,
+      row = _ref.row,
+      column = _ref.column,
+      handleClick = _ref.handleClick;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    onClick: handleClick,
+    "data-id": id,
+    "data-row": row,
+    "data-column": column,
+    "data-type": type,
+    className: 'conf-step__chair conf-step__chair_' + type
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Seat);
 
 /***/ }),
 

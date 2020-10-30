@@ -44,10 +44,11 @@ class DatabaseSeeder extends Seeder
         for($i = 1;$i <= $rows * $columns;$i++){
             $seats[] = ['seatId' => $i, 'hallId' => $hall, 'type' => 'standart'];
         }
+        return $seats;
         }
 
         DB::table('seatsconfig')->insertOrIgnore(createSeats2Hall(10, 8, 1));
-        DB::table('seatsconfig')->insertOrIgnore(createSeats2Hall(7, 12, 1));
+        DB::table('seatsconfig')->insertOrIgnore(createSeats2Hall(7, 12, 2));
 
         // Генерим места в 2 залах
         $hall1Seats = generateSeats(10, 8, 1, 1);

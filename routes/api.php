@@ -30,5 +30,7 @@ Route::middleware('auth:api')->group(function() {
     Route::get('getHalls', [FilmsController::class, 'getHalls']);
     Route::post('createHall', [FilmsController::class, 'createHall']);
     Route::delete('deleteHall/{id}', [FilmsController::class, 'deleteHall']);
+    Route::get('getSeatsConfig/{id}', [FilmsController::class, 'getSeatsConfig']);
+    Route::post('saveSeats', [FilmsController::class, 'saveSeats']);
 });
 

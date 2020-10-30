@@ -122,4 +122,24 @@ class FilmsController extends Controller
             ->delete();
         return "Success";
     }
+
+    public function getSeatsConfig($id) {
+        return DB::table('seatsconfig')
+            ->where('hallId', $id)
+            ->get();
+    }
+
+    public function saveSeats(Request $request) {
+        foreach($request->seats as $row) {
+            if(is_array($row)) {
+                foreach($row as $seat) {
+                    DB::table('seatsconfig')
+                        ->where('hallId', $request->id)
+                        ->where('seatId', $seat["id"])
+                        ->update(["type" => $seat["type"]]);
+                }
+            }
+        }
+        return "Success";
+    }
 }
