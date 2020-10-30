@@ -11,7 +11,11 @@ const HallConfig = ({halls}) => {
     })
 
     useEffect(() => {
-        axios.get("/api/getSeatsConfig/" + activeHallConfig.id, {headers: {
+        getSeatsConfig(activeHallConfig.id);
+    }, []);
+
+    const getSeatsConfig = (id) => {
+        axios.get("/api/getSeatsConfig/" + id, {headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
             }})
             .then(response => {
@@ -40,7 +44,7 @@ const HallConfig = ({halls}) => {
                         seats: response
                     }})
             });
-    }, []);
+    }
 
     const handleSeatClick = (e) => {
         let newSeats = editSeats(activeHallConfig.seats, e.target.dataset);
@@ -75,6 +79,35 @@ const HallConfig = ({halls}) => {
         return prev;
     }
 
+    const changeActive = (e) => {
+        const id = e.target.dataset.id;
+        setActiveHallConfig({
+            id,
+            rows: halls.find((elem, idx, halls) => elem.id === Number(id)).rows,
+            columns: halls.find((elem, idx, halls) => elem.id === Number(id)).columns,
+            seats: []
+        })
+        getSeatsConfig(id);
+    }
+
+    const rowsChangeHandler = (e) => {
+        setActiveHallConfig(prevState => {
+            return {
+                ...prevState,
+                rows: e.target.value,
+            }
+        });
+    }
+
+    const columnsChangeHandler = (e) => {
+        setActiveHallConfig(prevState => {
+            return {
+                ...prevState,
+                columns: e.target.value,
+            }
+        });
+    }
+
     return (
         <section className="conf-step">
             <header className="conf-step__header conf-step__header_opened">
@@ -89,7 +122,8 @@ const HallConfig = ({halls}) => {
                                 type="radio"
                                 className="conf-step__radio"
                                 name="chairs-hall"
-                                value={"Зал " + hall.id}
+                                data-id={hall.id}
+                                onClick={changeActive}
                                 defaultChecked={hall.id === activeHallConfig.id}
                             />
                             <span className="conf-step__selector">Зал {hall.id}</span>
@@ -99,13 +133,21 @@ const HallConfig = ({halls}) => {
                 <p className="conf-step__paragraph">Укажите количество рядов и максимальное количество кресел в
                     ряду:</p>
                 <div className="conf-step__legend">
-                    <label className="conf-step__label">Рядов, шт<input type="text" className="conf-step__input"
-                                                                        placeholder={activeHallConfig.rows}
-                    value={activeHallConfig.rows} /></label>
+                    <label className="conf-step__label">Рядов, шт
+                        <input
+                            type="text"
+                            className="conf-step__input"
+                            placeholder={activeHallConfig.rows}
+                            value={activeHallConfig.rows}
+                        /></label>
                     <span className="multiplier">x</span>
-                    <label className="conf-step__label">Мест, шт<input type="text" className="conf-step__input"
-                                                                       placeholder={activeHallConfig.columns}
-                    value={activeHallConfig.columns} /></label>
+                    <label className="conf-step__label">Мест, шт
+                        <input
+                            type="text"
+                            className="conf-step__input"
+                            placeholder={activeHallConfig.columns}
+                            value={activeHallConfig.columns}
+                        /></label>
                 </div>
                 <p className="conf-step__paragraph">Теперь вы можете указать типы кресел на схеме зала:</p>
                 <div className="conf-step__legend">

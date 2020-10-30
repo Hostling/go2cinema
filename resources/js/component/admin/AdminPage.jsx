@@ -42,7 +42,7 @@ const AdminPage = () => {
                     popupDeleteHall={toggleDeleteHallPopup}
                 />
                 <HallConfig halls={halls} />
-                <PriceConfig />
+                <PriceConfig halls={halls} />
                 <SessionsConfig />
                 <OpenSales />
             </main>

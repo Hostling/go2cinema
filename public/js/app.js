@@ -71837,7 +71837,9 @@ var AdminPage = function AdminPage() {
     popupDeleteHall: toggleDeleteHallPopup
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HallConfig__WEBPACK_IMPORTED_MODULE_2__["default"], {
     halls: halls
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PriceConfig__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SessionsConfig__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OpenSales__WEBPACK_IMPORTED_MODULE_5__["default"], null)));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PriceConfig__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    halls: halls
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SessionsConfig__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OpenSales__WEBPACK_IMPORTED_MODULE_5__["default"], null)));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (AdminPage);
@@ -71893,7 +71895,11 @@ var HallConfig = function HallConfig(_ref) {
       setActiveHallConfig = _useState2[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    axios.get("/api/getSeatsConfig/" + activeHallConfig.id, {
+    getSeatsConfig(activeHallConfig.id);
+  }, []);
+
+  var getSeatsConfig = function getSeatsConfig(id) {
+    axios.get("/api/getSeatsConfig/" + id, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
@@ -71904,12 +71910,13 @@ var HallConfig = function HallConfig(_ref) {
 
       for (var i = 1; i <= rowsCount; i++) {
         for (var k = 1; k <= columnsCount; k++) {
-          var id = columnsCount * i - (columnsCount - k);
+          var _id = columnsCount * i - (columnsCount - k);
+
           var a = {
-            id: id,
+            id: _id,
             row: i,
             column: k,
-            type: response.data[id - 1].type
+            type: response.data[_id - 1].type
           };
           if (temp[i] === undefined) temp[i] = [];
           temp[i].push(a);
@@ -71924,7 +71931,7 @@ var HallConfig = function HallConfig(_ref) {
         });
       });
     });
-  }, []);
+  };
 
   var handleSeatClick = function handleSeatClick(e) {
     var newSeats = editSeats(activeHallConfig.seats, e.target.dataset);
@@ -71965,6 +71972,37 @@ var HallConfig = function HallConfig(_ref) {
     return prev;
   };
 
+  var changeActive = function changeActive(e) {
+    var id = e.target.dataset.id;
+    setActiveHallConfig({
+      id: id,
+      rows: halls.find(function (elem, idx, halls) {
+        return elem.id === Number(id);
+      }).rows,
+      columns: halls.find(function (elem, idx, halls) {
+        return elem.id === Number(id);
+      }).columns,
+      seats: []
+    });
+    getSeatsConfig(id);
+  };
+
+  var rowsChangeHandler = function rowsChangeHandler(e) {
+    setActiveHallConfig(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        rows: e.target.value
+      });
+    });
+  };
+
+  var columnsChangeHandler = function columnsChangeHandler(e) {
+    setActiveHallConfig(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        columns: e.target.value
+      });
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
@@ -71984,7 +72022,8 @@ var HallConfig = function HallConfig(_ref) {
       type: "radio",
       className: "conf-step__radio",
       name: "chairs-hall",
-      value: "Зал " + hall.id,
+      "data-id": hall.id,
+      onClick: changeActive,
       defaultChecked: hall.id === activeHallConfig.id
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
       className: "conf-step__selector"
@@ -72390,9 +72429,74 @@ var PopupDeleteHall = function PopupDeleteHall(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-var PriceConfig = function PriceConfig() {
+
+var PriceConfig = function PriceConfig(_ref) {
+  var halls = _ref.halls;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+    id: 1
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      activeHall = _useState2[0],
+      setActiveHall = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(200),
+      _useState4 = _slicedToArray(_useState3, 2),
+      price = _useState4[0],
+      setPrice = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(350),
+      _useState6 = _slicedToArray(_useState5, 2),
+      priceVip = _useState6[0],
+      setPriceVip = _useState6[1];
+
+  var handleChangePrice = function handleChangePrice(e) {
+    setPrice(e.target.value);
+  };
+
+  var handleChangePriceVip = function handleChangePriceVip(e) {
+    setPriceVip(e.target.value);
+  };
+
+  var savePriceHandler = function savePriceHandler() {
+    axios.post("/api/setPrice", {
+      id: activeHall.id,
+      price: price,
+      priceVip: priceVip
+    }, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(function (response) {
+      return console.log(response.data);
+    });
+  };
+
+  var changeActiveHandler = function changeActiveHandler(e) {
+    setActiveHall({
+      id: e.target.dataset.id
+    });
+    setPrice(halls.find(function (elem, idx, halls) {
+      return elem.id === Number(e.target.dataset.id);
+    }).price);
+    setPriceVip(halls.find(function (elem, idx, halls) {
+      return elem.id === Number(e.target.dataset.id);
+    }).priceVip);
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
@@ -72405,22 +72509,21 @@ var PriceConfig = function PriceConfig() {
     className: "conf-step__paragraph"
   }, "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0437\u0430\u043B \u0434\u043B\u044F \u043A\u043E\u043D\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0438:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
     className: "conf-step__selectors-box"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "radio",
-    className: "conf-step__radio",
-    name: "prices-hall",
-    defaultValue: "\u0417\u0430\u043B 1",
-    defaultChecked: true
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__selector"
-  }, "\u0417\u0430\u043B 1")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "radio",
-    className: "conf-step__radio",
-    name: "prices-hall",
-    defaultValue: "\u0417\u0430\u043B 2"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "conf-step__selector"
-  }, "\u0417\u0430\u043B 2"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, halls.map(function (hall) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      key: hall.id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "radio",
+      className: "conf-step__radio",
+      name: "prices-hall",
+      onClick: changeActiveHandler,
+      "data-id": hall.id,
+      defaultValue: "Зал " + hall.id,
+      defaultChecked: hall.id === activeHall.id
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "conf-step__selector"
+    }, "\u0417\u0430\u043B ", hall.id));
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "conf-step__paragraph"
   }, "\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u0435 \u0446\u0435\u043D\u044B \u0434\u043B\u044F \u0442\u0438\u043F\u043E\u0432 \u043A\u0440\u0435\u0441\u0435\u043B:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "conf-step__legend"
@@ -72430,7 +72533,8 @@ var PriceConfig = function PriceConfig() {
     type: "text",
     className: "conf-step__input",
     placeholder: "0",
-    defaultValue: "200"
+    onChange: handleChangePrice,
+    value: price
   })), "\u0437\u0430 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "conf-step__chair conf-step__chair_standart"
   }), " \u043E\u0431\u044B\u0447\u043D\u044B\u0435 \u043A\u0440\u0435\u0441\u043B\u0430"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -72441,7 +72545,8 @@ var PriceConfig = function PriceConfig() {
     type: "text",
     className: "conf-step__input",
     placeholder: "0",
-    defaultValue: "350"
+    onChange: handleChangePriceVip,
+    value: priceVip
   })), "\u0437\u0430 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "conf-step__chair conf-step__chair_vip"
   }), " VIP \u043A\u0440\u0435\u0441\u043B\u0430"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", {
@@ -72451,7 +72556,8 @@ var PriceConfig = function PriceConfig() {
   }, "\u041E\u0442\u043C\u0435\u043D\u0430"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "submit",
     value: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C",
-    className: "conf-step__button conf-step__button-accent"
+    className: "conf-step__button conf-step__button-accent",
+    onClick: savePriceHandler
   }))));
 };
 

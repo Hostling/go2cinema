@@ -142,4 +142,14 @@ class FilmsController extends Controller
         }
         return "Success";
     }
+
+    public function setPrice(Request $request) {
+        DB::table('hall')
+            ->where('id', $request->id)
+            ->update([
+                "price" => $request->price,
+                "priceVip" => $request->priceVip
+            ]);
+        return "Success";
+    }
 }
