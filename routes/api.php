@@ -27,5 +27,8 @@ Route::post('cinema/booking', [FilmsController::class, 'booking']);
 
 Route::middleware('auth:api')->group(function() {
     Route::get('check', [AuthController::class, 'check']);
+    Route::get('getHalls', [FilmsController::class, 'getHalls']);
+    Route::post('createHall', [FilmsController::class, 'createHall']);
+    Route::delete('deleteHall/{id}', [FilmsController::class, 'deleteHall']);
 });
 

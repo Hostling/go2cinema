@@ -76,4 +76,50 @@ class FilmsController extends Controller
             ->get();
 
     }
+
+    public function getHalls() {
+        return DB::table('hall')
+            ->get();
+    }
+
+    public function createHall(Request $request) {
+        DB::table('hall')
+            ->insertOrIgnore([
+                "id" => $request->id,
+                "rows" => $request->rows,
+                "columns" => $request->columns,
+                "price" => $request->price,
+                "priceVip" => $request->priceVip,
+                "active" => false,
+                ]);
+        $this->createSeats($request->rows, $request->columns, $request->id);
+        return "Success";
+    }
+
+    private function createSeats($rows, $columns, $hall) {
+        $seats = [];
+        //standart, disabled, taken, vip
+        for($i = 1;$i <= $rows * $columns;$i++){
+            $seats[] = ['seatId' => $i, 'hallId' => $hall, 'type' => 'standart'];
+        }
+        DB::table('seatsconfig')->insertOrIgnore($seats);
+        return "Success";
+    }
+
+    public function deleteHall(Request $request) {
+        $id = $request->id;
+        DB::table('hall')
+            ->where('id', $id)
+            ->delete();
+        DB::table('seatsConfig')
+            ->where('hallId', $id)
+            ->delete();
+        DB::table('grid')
+            ->where('hall', $id)
+            ->delete();
+        DB::table('seat')
+            ->where('hall', $id)
+            ->delete();
+        return "Success";
+    }
 }

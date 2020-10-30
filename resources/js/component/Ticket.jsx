@@ -20,7 +20,8 @@ const Ticket = (props) => {
                     price: params.price,
                     sess: params.gridId,
                 })
-                    .then(response => setQr(prevState => prevState + response.data))
+                    .then(response => response.status !== 200 ? setQr('Не удалось получить QR')
+                        : setQr(prevState => prevState + response.data))
             })
     }, []);
 

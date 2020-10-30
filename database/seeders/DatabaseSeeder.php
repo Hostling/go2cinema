@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use mysql_xdevapi\Table;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -37,6 +37,17 @@ class DatabaseSeeder extends Seeder
             }
             return $seats;
         }
+
+        function createSeats2Hall($rows, $columns, $hall) {
+        $seats = [];
+        //standart, disabled, taken, vip
+        for($i = 1;$i <= $rows * $columns;$i++){
+            $seats[] = ['seatId' => $i, 'hallId' => $hall, 'type' => 'standart'];
+        }
+        }
+
+        DB::table('seatsconfig')->insertOrIgnore(createSeats2Hall(10, 8, 1));
+        DB::table('seatsconfig')->insertOrIgnore(createSeats2Hall(7, 12, 1));
 
         // Генерим места в 2 залах
         $hall1Seats = generateSeats(10, 8, 1, 1);
