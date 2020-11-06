@@ -139,6 +139,7 @@ const HallConfig = ({halls}) => {
                             className="conf-step__input"
                             placeholder={activeHallConfig.rows}
                             value={activeHallConfig.rows}
+                            readOnly={true}
                         /></label>
                     <span className="multiplier">x</span>
                     <label className="conf-step__label">Мест, шт
@@ -147,6 +148,7 @@ const HallConfig = ({halls}) => {
                             className="conf-step__input"
                             placeholder={activeHallConfig.columns}
                             value={activeHallConfig.columns}
+                            readOnly={true}
                         /></label>
                 </div>
                 <p className="conf-step__paragraph">Теперь вы можете указать типы кресел на схеме зала:</p>

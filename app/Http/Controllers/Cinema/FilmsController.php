@@ -152,4 +152,69 @@ class FilmsController extends Controller
             ]);
         return "Success";
     }
+
+    public function getFilms() {
+        return DB::table('film')
+            ->get();
+    }
+
+    public function getGrid() {
+        return DB::table('grid')
+            ->get();
+    }
+
+    public function addFilm(Request $request) {
+        DB::table('film')
+            ->insertOrIgnore([
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'poster' => 'i/poster1.jpg',
+                    'country' => $request->country,
+                    'duration' => $request->duration,
+                ]);
+        return "Success";
+    }
+
+    public function addShowtime(Request $request) {
+        DB::table('grid')
+            ->insertOrIgnore([
+                'hall' => $request->hall,
+                'year' => 2020,
+                'month' => 10,
+                'day' => 30,
+                'time' => $request->time,
+                'film' => $request->film
+            ]);
+
+        $gridId = DB::table('grid')->max('id');
+
+        $seats = DB::table('seatsconfig')
+            ->where("hallId", $request->hall)
+            ->get();
+
+        foreach($seats as $seat) {
+            DB::table('seat')
+                ->insertOrIgnore([
+                    "idInHall" => $seat->seatId,
+                    "hall" => $request->hall,
+                    "gridId" => $gridId,
+                    "type" => $seat->type
+                ]);
+        }
+
+        return "Success";
+    }
+
+    public function deleteShowtime(Request $request) {
+        $id = $request->id;
+        DB::table('grid')
+            ->where("id", $id)
+            ->delete();
+
+        DB::table('seat')
+            ->where("gridId", $id)
+            ->delete();
+
+        return "Success";
+    }
 }

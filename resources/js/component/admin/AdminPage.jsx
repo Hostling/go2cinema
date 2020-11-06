@@ -6,11 +6,20 @@ import SessionsConfig from "./SessionsConfig";
 import OpenSales from "./OpenSales";
 import PopupAddHall from "./PopupAddHall";
 import PopupDeleteHall from "./PopupDeleteHall";
+import PopupAddFilm from "./PopupAddFilm";
+import PopupAddShowtime from "./PopupAddShowtime";
+import PopupDeleteShowtime from "./PopupDeleteShowtime";
 
 const AdminPage = () => {
     const [halls, setHalls] = useState([]);
     const [addHallActive, setAddHallActive] = useState(false);
     const [deleteHallActive, setDeleteHallActive] = useState(false);
+    const [addFilmActive, setAddFilmActive] = useState(false);
+    const [addShowtimeActive, setAddShowtimeActive] = useState(false);
+    const [deleteShowtimeActive, setDeleteShowtimeActive] = useState(false);
+    const [film, setFilm] = useState({});
+    const [deleteGridId, setDeleteGridId] = useState("");
+    const [deleteShowtimeFilmName, setDeleteShowtimeFilmName] = useState("");
 
     useEffect(() => {
         getHalls();
@@ -31,10 +40,28 @@ const AdminPage = () => {
         setDeleteHallActive(deleteHallActive ? false : id);
     }
 
+    const toggleAddFilmPopup = () => {
+        setAddFilmActive(!addFilmActive);
+    }
+
+    const toggleAddShowtimePopup = (film) => {
+        setFilm(film);
+        setAddShowtimeActive(!addShowtimeActive);
+    }
+
+    const toggleDeleteShowtimePopup = (gridId, filmName) => {
+        setDeleteGridId(gridId);
+        setDeleteShowtimeFilmName(filmName);
+        setDeleteShowtimeActive(!deleteShowtimeActive);
+    }
+
     return (
         <>
             <PopupAddHall active={addHallActive} close={toggleAddHallPopup} />
             <PopupDeleteHall id={deleteHallActive} close={toggleDeleteHallPopup} />
+            <PopupAddFilm active={addFilmActive} close={toggleAddFilmPopup} />
+            <PopupAddShowtime film={film} halls={halls} active={addShowtimeActive} close={toggleAddShowtimePopup} />
+            <PopupDeleteShowtime filmName={deleteShowtimeFilmName} gridId={deleteGridId} active={deleteShowtimeActive} close={toggleDeleteShowtimePopup} />
             <main className="conf-steps">
                 <HallInfo
                     halls={halls}
@@ -43,7 +70,12 @@ const AdminPage = () => {
                 />
                 <HallConfig halls={halls} />
                 <PriceConfig halls={halls} />
-                <SessionsConfig />
+                <SessionsConfig
+                    halls={halls}
+                    popupAddFilmHandler={toggleAddFilmPopup}
+                    popupAddShowtimeHandler={toggleAddShowtimePopup}
+                    popupDeleteShowtimeHandler={toggleDeleteShowtimePopup}
+                />
                 <OpenSales />
             </main>
         </>

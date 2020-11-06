@@ -1210,6 +1210,8 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
 
 .conf-step__seances-timeline {
   position: relative;
+    display: flex;
+    justify-content: space-between;
   outline: 1px solid #848484;
   padding: 10px 0;
   height: 40px;
@@ -1217,7 +1219,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   width: calc(1440px * 0.5); }
 
 .conf-step__seances-movie {
-  position: absolute;
+  position: relative;
   height: 40px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
