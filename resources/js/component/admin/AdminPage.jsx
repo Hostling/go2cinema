@@ -25,6 +25,7 @@ const AdminPage = () => {
         getHalls();
     }, []);
 
+
     const getHalls = () => {
         axios.get('/api/getHalls', {headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),

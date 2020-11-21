@@ -8,7 +8,11 @@ const HallConfig = ({halls}) => {
         rows: 10,
         columns: 8,
         seats: [],
-    })
+    });
+    const [wrap, setWrap] = useState('opened');
+
+    const wrapper = () => wrap === 'opened' ? setWrap('closed'):setWrap('opened');
+
 
     useEffect(() => {
         getSeatsConfig(activeHallConfig.id);
@@ -110,7 +114,9 @@ const HallConfig = ({halls}) => {
 
     return (
         <section className="conf-step">
-            <header className="conf-step__header conf-step__header_opened">
+            <header
+                onClick={wrapper}
+                className={'conf-step__header  conf-step__header_' + wrap}>
                 <h2 className="conf-step__title">Конфигурация залов</h2>
             </header>
             <div className="conf-step__wrapper">

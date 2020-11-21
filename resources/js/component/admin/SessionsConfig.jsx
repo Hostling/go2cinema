@@ -4,6 +4,9 @@ import {nanoid} from "nanoid";
 const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, popupDeleteShowtimeHandler}) => {
     const [films, setFilms] = useState([]);
     const [grid, setGrid] = useState([]);
+    const [wrap, setWrap] = useState('opened');
+
+    const wrapper = () => wrap === 'opened' ? setWrap('closed'):setWrap('opened');
 
     useEffect(() => {
         axios.get('/api/getFilms', {headers: {
@@ -22,7 +25,9 @@ const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, po
 
     return (
         <section className="conf-step">
-            <header className="conf-step__header conf-step__header_opened">
+            <header
+                onClick={wrapper}
+                className={'conf-step__header  conf-step__header_' + wrap}>
                 <h2 className="conf-step__title">Сетка сеансов</h2>
             </header>
             <div className="conf-step__wrapper">

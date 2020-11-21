@@ -6,6 +6,9 @@ const PriceConfig = ({halls}) => {
     })
     const [price, setPrice] = useState(200);
     const [priceVip, setPriceVip] = useState(350);
+    const [wrap, setWrap] = useState('opened');
+
+    const wrapper = () => wrap === 'opened' ? setWrap('closed'):setWrap('opened');
 
     const handleChangePrice = (e) => {
         setPrice(e.target.value);
@@ -34,7 +37,9 @@ const PriceConfig = ({halls}) => {
 
     return (
         <section className="conf-step">
-            <header className="conf-step__header conf-step__header_opened">
+            <header
+                onClick={wrapper}
+                className={'conf-step__header  conf-step__header_' + wrap}>
                 <h2 className="conf-step__title">Конфигурация цен</h2>
             </header>
             <div className="conf-step__wrapper">

@@ -71963,6 +71963,15 @@ var HallConfig = function HallConfig(_ref) {
       activeHallConfig = _useState2[0],
       setActiveHallConfig = _useState2[1];
 
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('opened'),
+      _useState4 = _slicedToArray(_useState3, 2),
+      wrap = _useState4[0],
+      setWrap = _useState4[1];
+
+  var wrapper = function wrapper() {
+    return wrap === 'opened' ? setWrap('closed') : setWrap('opened');
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     getSeatsConfig(activeHallConfig.id);
   }, []);
@@ -72075,7 +72084,8 @@ var HallConfig = function HallConfig(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
-    className: "conf-step__header conf-step__header_opened"
+    onClick: wrapper,
+    className: 'conf-step__header  conf-step__header_' + wrap
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "conf-step__title"
   }, "\u041A\u043E\u043D\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044F \u0437\u0430\u043B\u043E\u0432")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -72178,16 +72188,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 var _this = undefined;
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 var HallInfo = function HallInfo(_ref) {
   var halls = _ref.halls,
       popupHandler = _ref.popupHandler,
       popupDeleteHall = _ref.popupDeleteHall;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('opened'),
+      _useState2 = _slicedToArray(_useState, 2),
+      wrap = _useState2[0],
+      setWrap = _useState2[1];
+
+  var wrapper = function wrapper() {
+    return wrap === 'opened' ? setWrap('closed') : setWrap('opened');
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
-    className: "conf-step__header conf-step__header_opened"
+    onClick: wrapper,
+    className: 'conf-step__header  conf-step__header_' + wrap
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "conf-step__title"
   }, "\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0437\u0430\u043B\u0430\u043C\u0438")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -72294,13 +72327,35 @@ var Login = function Login(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 var OpenSales = function OpenSales() {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('opened'),
+      _useState2 = _slicedToArray(_useState, 2),
+      wrap = _useState2[0],
+      setWrap = _useState2[1];
+
+  var wrapper = function wrapper() {
+    return wrap === 'opened' ? setWrap('closed') : setWrap('opened');
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
-    className: "conf-step__header conf-step__header_opened"
+    onClick: wrapper,
+    className: 'conf-step__header  conf-step__header_' + wrap
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "conf-step__title"
   }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0436\u0438")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -72904,6 +72959,15 @@ var PriceConfig = function PriceConfig(_ref) {
       priceVip = _useState6[0],
       setPriceVip = _useState6[1];
 
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('opened'),
+      _useState8 = _slicedToArray(_useState7, 2),
+      wrap = _useState8[0],
+      setWrap = _useState8[1];
+
+  var wrapper = function wrapper() {
+    return wrap === 'opened' ? setWrap('closed') : setWrap('opened');
+  };
+
   var handleChangePrice = function handleChangePrice(e) {
     setPrice(e.target.value);
   };
@@ -72941,7 +73005,8 @@ var PriceConfig = function PriceConfig(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
-    className: "conf-step__header conf-step__header_opened"
+    onClick: wrapper,
+    className: 'conf-step__header  conf-step__header_' + wrap
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "conf-step__title"
   }, "\u041A\u043E\u043D\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044F \u0446\u0435\u043D")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -73084,6 +73149,15 @@ var SessionsConfig = function SessionsConfig(_ref) {
       grid = _useState4[0],
       setGrid = _useState4[1];
 
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('opened'),
+      _useState6 = _slicedToArray(_useState5, 2),
+      wrap = _useState6[0],
+      setWrap = _useState6[1];
+
+  var wrapper = function wrapper() {
+    return wrap === 'opened' ? setWrap('closed') : setWrap('opened');
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     axios.get('/api/getFilms', {
       headers: {
@@ -73104,7 +73178,8 @@ var SessionsConfig = function SessionsConfig(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
-    className: "conf-step__header conf-step__header_opened"
+    onClick: wrapper,
+    className: 'conf-step__header  conf-step__header_' + wrap
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "conf-step__title"
   }, "\u0421\u0435\u0442\u043A\u0430 \u0441\u0435\u0430\u043D\u0441\u043E\u0432")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -73171,7 +73246,7 @@ var SessionsConfig = function SessionsConfig(_ref) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Work\git\go2cinema\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Work\Github\go2cinema\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

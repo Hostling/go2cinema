@@ -1,10 +1,15 @@
-import React from 'react';
+import React,{useState} from 'react';
 
 const HallInfo = ({halls, popupHandler, popupDeleteHall}) => {
+    const [wrap, setWrap] = useState('opened');
+
+    const wrapper = () => wrap === 'opened' ? setWrap('closed'):setWrap('opened');
 
     return (
         <section className="conf-step">
-            <header className="conf-step__header conf-step__header_opened">
+            <header
+                onClick={wrapper}
+                className={'conf-step__header  conf-step__header_' + wrap}>
                 <h2 className="conf-step__title">Управление залами</h2>
             </header>
             <div className="conf-step__wrapper">
