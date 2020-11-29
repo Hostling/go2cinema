@@ -73159,6 +73159,10 @@ var SessionsConfig = function SessionsConfig(_ref) {
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    getFilms();
+  }, []);
+
+  var getFilms = function getFilms() {
     axios.get('/api/getFilms', {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -73174,7 +73178,20 @@ var SessionsConfig = function SessionsConfig(_ref) {
         return setGrid(response.data);
       });
     });
-  }, []);
+  };
+
+  var delMovieHandler = function delMovieHandler(e) {
+    e.preventDefault();
+    var id = e.target.dataset.id;
+    axios["delete"]('/api/delMovie/' + id, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(function () {
+      return getFilms();
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
     className: "conf-step"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
@@ -73194,14 +73211,19 @@ var SessionsConfig = function SessionsConfig(_ref) {
   }, films.map(function (film) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: film.id,
-      onClick: popupAddShowtimeHandler.bind(_this, film),
       className: "conf-step__movie"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      "data-id": film.id,
+      className: "conf-step__seances-del-movie",
+      onClick: delMovieHandler
+    }, "X"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       className: "conf-step__movie-poster",
       alt: "poster",
-      src: film.poster
+      src: film.poster,
+      onClick: popupAddShowtimeHandler.bind(_this, film)
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-      className: "conf-step__movie-title"
+      className: "conf-step__movie-title",
+      onClick: popupAddShowtimeHandler.bind(_this, film)
     }, film.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
       className: "conf-step__movie-duration"
     }, film.duration, " \u043C\u0438\u043D\u0443\u0442"));

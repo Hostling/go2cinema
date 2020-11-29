@@ -435,3 +435,13 @@ button a {
     display: none;
   }
 }
+
+.conf-step__seances-del-movie {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 1px #ff0000 solid;
+    border-radius: 50%;
+    width: 15px;
+    text-align: center;
+}

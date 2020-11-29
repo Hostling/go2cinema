@@ -9,6 +9,10 @@ const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, po
     const wrapper = () => wrap === 'opened' ? setWrap('closed'):setWrap('opened');
 
     useEffect(() => {
+        getFilms();
+    }, []);
+
+    const getFilms = () => {
         axios.get('/api/getFilms', {headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
             }})
@@ -19,8 +23,16 @@ const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, po
                     }})
                     .then(response => setGrid(response.data));
             });
+    }
 
-    }, []);
+    const delMovieHandler = (e) => {
+        e.preventDefault();
+        const id = e.target.dataset.id;
+        axios.delete('/api/delMovie/' + id, {headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }})
+            .then(() => getFilms())
+    }
 
 
     return (
@@ -41,10 +53,20 @@ const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, po
                     {films.map(film => (
                         <div
                             key={film.id}
-                            onClick={popupAddShowtimeHandler.bind(this, film)}
                             className="conf-step__movie">
-                            <img className="conf-step__movie-poster" alt="poster" src={film.poster} />
-                            <h3 className="conf-step__movie-title">{film.name}</h3>
+                            <div
+                                data-id={film.id}
+                                className="conf-step__seances-del-movie"
+                                onClick={delMovieHandler}
+                            >X</div>
+                            <img
+                                className="conf-step__movie-poster" alt="poster" src={film.poster}
+                                onClick={popupAddShowtimeHandler.bind(this, film)}
+                            />
+                            <h3
+                                className="conf-step__movie-title"
+                                onClick={popupAddShowtimeHandler.bind(this, film)}
+                            >{film.name}</h3>
                             <p className="conf-step__movie-duration">{film.duration} минут</p>
                         </div>
                     ))}

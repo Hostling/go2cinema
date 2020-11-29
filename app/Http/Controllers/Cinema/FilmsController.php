@@ -219,4 +219,28 @@ class FilmsController extends Controller
 
         return "Success";
     }
+
+    public function delMovie(Request $request) {
+        $id = $request->id;
+        $grids = DB::table('grid')
+            ->where('film', $id)
+            ->get('id');
+
+        $gridIds = [];
+        foreach ($grids as $value) $gridIds[] = $value->id;
+
+        DB::table('seat')
+            ->whereIn('gridId', $gridIds)
+            ->delete();
+
+        DB::table('grid')
+            ->where('film', $id)
+            ->delete();
+
+        DB::table('film')
+            ->where('id', $id)
+            ->delete();
+
+        return "Success";
+    }
 }
