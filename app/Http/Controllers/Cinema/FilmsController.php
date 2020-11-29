@@ -17,6 +17,7 @@ class FilmsController extends Controller
             ->where('month', $month)
             ->where('day', $day)
             ->select('id', 'hall', 'time', 'film')
+            ->orderBy('time')
             ->get();
         $result = [];
 
@@ -160,6 +161,7 @@ class FilmsController extends Controller
 
     public function getGrid() {
         return DB::table('grid')
+            ->orderBy('time')
             ->get();
     }
 
