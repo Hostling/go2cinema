@@ -20,6 +20,8 @@ const AdminPage = () => {
     const [film, setFilm] = useState({});
     const [deleteGridId, setDeleteGridId] = useState("");
     const [deleteShowtimeFilmName, setDeleteShowtimeFilmName] = useState("");
+    const [films, setFilms] = useState([]);
+    const [grid, setGrid] = useState([]);
 
     useEffect(() => {
         getHalls();
@@ -33,7 +35,21 @@ const AdminPage = () => {
             .then(response => setHalls(response.data))
     }
 
-    const toggleAddHallPopup = () => {
+    const getFilms = () => {
+        axios.get('/api/getFilms', {headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }})
+            .then(response => setFilms(response.data))
+            .then(() => {
+                axios.get('/api/getGrid', {headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    }})
+                    .then(response => setGrid(response.data));
+            });
+    }
+
+    const toggleAddHallPopup = (e) => {
+        e.preventDefault();
         setAddHallActive(!addHallActive);
     }
 
@@ -41,18 +57,21 @@ const AdminPage = () => {
         setDeleteHallActive(deleteHallActive ? false : id);
     }
 
-    const toggleAddFilmPopup = () => {
+    const toggleAddFilmPopup = (e) => {
+        e.preventDefault();
         setAddFilmActive(!addFilmActive);
     }
 
     const toggleAddShowtimePopup = (film) => {
         setFilm(film);
+        getFilms();
         setAddShowtimeActive(!addShowtimeActive);
     }
 
     const toggleDeleteShowtimePopup = (gridId, filmName) => {
         setDeleteGridId(gridId);
         setDeleteShowtimeFilmName(filmName);
+        getFilms();
         setDeleteShowtimeActive(!deleteShowtimeActive);
     }
 
@@ -76,6 +95,9 @@ const AdminPage = () => {
                     popupAddFilmHandler={toggleAddFilmPopup}
                     popupAddShowtimeHandler={toggleAddShowtimePopup}
                     popupDeleteShowtimeHandler={toggleDeleteShowtimePopup}
+                    films={films}
+                    getFilms={getFilms}
+                    grid={grid}
                 />
                 <OpenSales />
             </main>

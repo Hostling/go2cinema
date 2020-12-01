@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {nanoid} from "nanoid";
 
-const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, popupDeleteShowtimeHandler}) => {
-    const [films, setFilms] = useState([]);
-    const [grid, setGrid] = useState([]);
+const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, popupDeleteShowtimeHandler, films, getFilms, grid}) => {
     const [wrap, setWrap] = useState('opened');
 
     const wrapper = () => wrap === 'opened' ? setWrap('closed'):setWrap('opened');
@@ -11,19 +9,6 @@ const SessionsConfig = ({halls, popupAddFilmHandler, popupAddShowtimeHandler, po
     useEffect(() => {
         getFilms();
     }, []);
-
-    const getFilms = () => {
-        axios.get('/api/getFilms', {headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token'),
-            }})
-            .then(response => setFilms(response.data))
-            .then(() => {
-                axios.get('/api/getGrid', {headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                    }})
-                    .then(response => setGrid(response.data));
-            });
-    }
 
     const delMovieHandler = (e) => {
         e.preventDefault();

@@ -32,11 +32,11 @@ const PopupAddShowtime = ({active, close, halls, film}) => {
                     <div className="popup__header">
                         <h2 className="popup__title">
                             Добавление сеанса
-                            <a className="popup__dismiss" href="#"><img
+                            <button className="popup__dismiss" href="#"><img
                                 src="i/close.png"
                                 alt="Закрыть"
-                                onClick={close}
-                            /></a>
+                                onClick={e => {e.preventDefault();close()}}
+                            /></button>
                         </h2>
                     </div>
                     <div className="popup__wrapper">
@@ -81,7 +81,7 @@ const PopupAddShowtime = ({active, close, halls, film}) => {
                                        className="conf-step__button conf-step__button-accent" />
                                     <button
                                         className="conf-step__button conf-step__button-regular"
-                                        onClick={close}
+                                        onClick={e => {e.preventDefault();close()}}
                                     >Отменить</button>
                             </div>
                         </form>

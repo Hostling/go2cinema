@@ -17,7 +17,7 @@ const PopupDeleteShowtime = ({filmName, gridId, active, close}) => {
                         <h2 className="popup__title">
                             Снятие с сеанса
                             <a className="popup__dismiss" href="#"
-                            onClick={close}><img src="i/close.png" alt="Закрыть" /></a>
+                            onClick={e => {e.preventDefault();close()}}><img src="i/close.png" alt="Закрыть" /></a>
                         </h2>
 
                     </div>
@@ -29,7 +29,7 @@ const PopupDeleteShowtime = ({filmName, gridId, active, close}) => {
                                 <input type="submit" value="Удалить"
                                        className="conf-step__button conf-step__button-accent"
                                 onClick={deleteShowtimeHandler}/>
-                                    <button className="conf-step__button conf-step__button-regular" onClick={close}>Отменить</button>
+                                    <button className="conf-step__button conf-step__button-regular" onClick={e => {e.preventDefault();close()}}>Отменить</button>
                             </div>
                         </form>
                     </div>
