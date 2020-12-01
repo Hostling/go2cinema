@@ -99,7 +99,7 @@ const AdminPage = () => {
                     getFilms={getFilms}
                     grid={grid}
                 />
-                <OpenSales />
+                <OpenSales halls={halls} />
             </main>
         </>
     );

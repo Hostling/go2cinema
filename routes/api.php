@@ -39,5 +39,6 @@ Route::middleware('auth:api')->group(function() {
     Route::post('addShowtime', [FilmsController::class, 'addShowtime']);
     Route::delete('deleteShowtime/{id}', [FilmsController::class, 'deleteShowtime']);
     Route::delete('delMovie/{id}', [FilmsController::class, 'delMovie']);
+    Route::get('toggleHall/{id}', [FilmsController::class, 'toggleHall']);
 });
 

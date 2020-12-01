@@ -243,4 +243,16 @@ class FilmsController extends Controller
 
         return "Success";
     }
+
+    public function toggleHall($id) {
+        $active = DB::table('hall')
+            ->where('id', $id)
+            ->get('active');
+
+        $active[0]->active ? $active = false : $active = true;
+
+        DB::table('hall')->where('id', $id)->update(['active' => $active]);
+
+        return "Success";
+    }
 }

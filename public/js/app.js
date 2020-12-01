@@ -71943,7 +71943,9 @@ var AdminPage = function AdminPage() {
     films: films,
     getFilms: getFilms,
     grid: grid
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OpenSales__WEBPACK_IMPORTED_MODULE_5__["default"], null)));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OpenSales__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    halls: halls
+  })));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (AdminPage);
@@ -72376,14 +72378,63 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var OpenSales = function OpenSales() {
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('opened'),
+var OpenSales = function OpenSales(_ref) {
+  var halls = _ref.halls;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+    id: 0
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      wrap = _useState2[0],
-      setWrap = _useState2[1];
+      activeHall = _useState2[0],
+      setActiveHall = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('opened'),
+      _useState4 = _slicedToArray(_useState3, 2),
+      wrap = _useState4[0],
+      setWrap = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('Приостановить продажу билетов'),
+      _useState6 = _slicedToArray(_useState5, 2),
+      status = _useState6[0],
+      setStatus = _useState6[1];
+
+  var changeActiveHandler = function changeActiveHandler(e) {
+    setActiveHall({
+      id: e.target.dataset.id
+    });
+    getStatus();
+  };
+
+  var getStatus = function getStatus() {
+    if (halls[Number(activeHall.id)].active === 0) {
+      setStatus('Открыть продажу билетов');
+    } else {
+      setStatus('Приостановить продажу билетов');
+    }
+  };
+
+  var changeStatus = function changeStatus() {
+    if (status === 'Приостановить продажу билетов') {
+      setStatus('Открыть продажу билетов');
+    } else {
+      setStatus('Приостановить продажу билетов');
+    }
+  };
 
   var wrapper = function wrapper() {
     return wrap === 'opened' ? setWrap('closed') : setWrap('opened');
+  };
+
+  var toggleHall = function toggleHall() {
+    axios.get('/api/toggleHall/' + halls[Number(activeHall.id)].id, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(function (response) {
+      return console.log(response.data);
+    }).then(function () {
+      return changeStatus();
+    });
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
@@ -72397,9 +72448,28 @@ var OpenSales = function OpenSales() {
     className: "conf-step__wrapper text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "conf-step__paragraph"
+  }, "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0437\u0430\u043B \u0434\u043B\u044F \u043A\u043E\u043D\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0438:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+    className: "conf-step__selectors-box"
+  }, halls.map(function (hall, idx) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      key: idx
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "radio",
+      className: "conf-step__radio",
+      name: "prices-hall",
+      onClick: changeActiveHandler,
+      "data-id": idx,
+      defaultValue: "Зал " + hall.id,
+      defaultChecked: hall.id === activeHall.id
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "conf-step__selector"
+    }, "\u0417\u0430\u043B ", hall.id));
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "conf-step__paragraph"
   }, "\u0412\u0441\u0451 \u0433\u043E\u0442\u043E\u0432\u043E, \u0442\u0435\u043F\u0435\u0440\u044C \u043C\u043E\u0436\u043D\u043E:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "conf-step__button conf-step__button-accent"
-  }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0436\u0443 \u0431\u0438\u043B\u0435\u0442\u043E\u0432")));
+    className: "conf-step__button conf-step__button-accent",
+    onClick: toggleHall
+  }, status)));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (OpenSales);

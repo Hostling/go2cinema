@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 const PriceConfig = ({halls}) => {
     const [activeHall, setActiveHall] = useState({
         id: 1,
-    })
+    });
     const [price, setPrice] = useState(200);
     const [priceVip, setPriceVip] = useState(350);
     const [wrap, setWrap] = useState('opened');
