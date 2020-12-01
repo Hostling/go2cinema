@@ -5,6 +5,7 @@ const PopupAddFilm = ({active, close}) => {
     const [country, setCountry] = useState("");
     const [duration, setDuration] = useState("");
     const [description, setDescription] = useState("");
+    const [poster, setPoster] = useState("i/poster1.jpg");
 
     const changeNameHandler = (e) => {
         e.preventDefault();
@@ -26,13 +27,19 @@ const PopupAddFilm = ({active, close}) => {
         setDescription(e.target.value);
     }
 
+    const changePoster = (e) => {
+        e.preventDefault();
+        setPoster(e.target.value);
+    }
+
     const addFilmHandler = (e) => {
         e.preventDefault();
         axios.post("/api/addFilm", {
             name,
             description,
             country,
-            duration
+            duration,
+            poster
             },
         {headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -99,6 +106,17 @@ const PopupAddFilm = ({active, close}) => {
                                     name="duration"
                                     onChange={changeDurationHandler}
                                     value={duration}
+                                    required />
+                            </label>
+                            <label className="conf-step__label conf-step__label-fullsize" htmlFor="poster">
+                                Постер
+                                <input
+                                    className="conf-step__input"
+                                    type="text"
+                                    placeholder="Например, &laquo;путь к картинке&raquo;"
+                                    name="duration"
+                                    onChange={changePoster}
+                                    value={poster}
                                     required />
                             </label>
                             <div className="conf-step__buttons text-center">

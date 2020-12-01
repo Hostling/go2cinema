@@ -170,7 +170,7 @@ class FilmsController extends Controller
             ->insertOrIgnore([
                     'name' => $request->name,
                     'description' => $request->description,
-                    'poster' => 'i/poster1.jpg',
+                    'poster' => $request->poster,
                     'country' => $request->country,
                     'duration' => $request->duration,
                 ]);

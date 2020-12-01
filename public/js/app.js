@@ -72420,6 +72420,11 @@ var PopupAddFilm = function PopupAddFilm(_ref) {
       description = _useState8[0],
       setDescription = _useState8[1];
 
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])("i/poster1.jpg"),
+      _useState10 = _slicedToArray(_useState9, 2),
+      poster = _useState10[0],
+      setPoster = _useState10[1];
+
   var changeNameHandler = function changeNameHandler(e) {
     e.preventDefault();
     setName(e.target.value);
@@ -72440,13 +72445,19 @@ var PopupAddFilm = function PopupAddFilm(_ref) {
     setDescription(e.target.value);
   };
 
+  var changePoster = function changePoster(e) {
+    e.preventDefault();
+    setPoster(e.target.value);
+  };
+
   var addFilmHandler = function addFilmHandler(e) {
     e.preventDefault();
     axios.post("/api/addFilm", {
       name: name,
       description: description,
       country: country,
-      duration: duration
+      duration: duration,
+      poster: poster
     }, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -72520,6 +72531,17 @@ var PopupAddFilm = function PopupAddFilm(_ref) {
     name: "duration",
     onChange: changeDurationHandler,
     value: duration,
+    required: true
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    className: "conf-step__label conf-step__label-fullsize",
+    htmlFor: "poster"
+  }, "\u041F\u043E\u0441\u0442\u0435\u0440", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "conf-step__input",
+    type: "text",
+    placeholder: "\u041D\u0430\u043F\u0440\u0438\u043C\u0435\u0440, \xAB\u043F\u0443\u0442\u044C \u043A \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0435\xBB",
+    name: "duration",
+    onChange: changePoster,
+    value: poster,
     required: true
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "conf-step__buttons text-center"
