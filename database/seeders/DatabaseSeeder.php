@@ -249,7 +249,7 @@ class DatabaseSeeder extends Seeder
         // Сетка фильмов
 
         DB::table('grid')->insertOrIgnore([
-            ['id' => 1, 'hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '9:00', 'film' => 1],
+            ['id' => 1, 'hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '09:00', 'film' => 1],
             ['id' => 2, 'hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '11:00', 'film' => 1],
             ['id' => 3, 'hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '14:00', 'film' => 1],
             ['id' => 4, 'hall' => 1, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '16:00', 'film' => 1],
@@ -263,7 +263,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 12, 'hall' => 2, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '16:30', 'film' => 2],
             ['id' => 13, 'hall' => 2, 'year' => 2020, 'month' => 10, 'day' => 30, 'time' => '20:00', 'film' => 1],
 
-            ['id' => 14, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 1, 'time' => '9:00', 'film' => 1],
+            ['id' => 14, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 1, 'time' => '09:00', 'film' => 1],
             ['id' => 15, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 1, 'time' => '11:00', 'film' => 1],
             ['id' => 16, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 1, 'time' => '14:00', 'film' => 1],
             ['id' => 17, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 1, 'time' => '16:00', 'film' => 1],
@@ -277,7 +277,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 25, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 1, 'time' => '16:30', 'film' => 2],
             ['id' => 26, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 1, 'time' => '20:00', 'film' => 1],
 
-            ['id' => 27, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 2, 'time' => '9:00', 'film' => 1],
+            ['id' => 27, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 2, 'time' => '09:00', 'film' => 1],
             ['id' => 28, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 2, 'time' => '11:00', 'film' => 1],
             ['id' => 29, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 2, 'time' => '14:00', 'film' => 1],
             ['id' => 30, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 2, 'time' => '16:00', 'film' => 1],
@@ -291,7 +291,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 38, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 2, 'time' => '16:30', 'film' => 2],
             ['id' => 39, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 2, 'time' => '20:00', 'film' => 1],
 
-            ['id' => 40, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 3, 'time' => '9:00', 'film' => 1],
+            ['id' => 40, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 3, 'time' => '09:00', 'film' => 1],
             ['id' => 41, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 3, 'time' => '11:00', 'film' => 1],
             ['id' => 42, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 3, 'time' => '14:00', 'film' => 1],
             ['id' => 43, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 3, 'time' => '16:00', 'film' => 1],
@@ -305,7 +305,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 51, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 3, 'time' => '16:30', 'film' => 2],
             ['id' => 52, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 3, 'time' => '20:00', 'film' => 1],
 
-            ['id' => 53, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 4, 'time' => '9:00', 'film' => 1],
+            ['id' => 53, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 4, 'time' => '09:00', 'film' => 1],
             ['id' => 54, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 4, 'time' => '11:00', 'film' => 1],
             ['id' => 55, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 4, 'time' => '14:00', 'film' => 1],
             ['id' => 56, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 4, 'time' => '16:00', 'film' => 1],
@@ -319,7 +319,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 64, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 4, 'time' => '16:30', 'film' => 2],
             ['id' => 65, 'hall' => 2, 'year' => 2020, 'month' => 11, 'day' => 4, 'time' => '20:00', 'film' => 1],
 
-            ['id' => 66, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 5, 'time' => '9:00', 'film' => 1],
+            ['id' => 66, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 5, 'time' => '09:00', 'film' => 1],
             ['id' => 67, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 5, 'time' => '11:00', 'film' => 1],
             ['id' => 68, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 5, 'time' => '14:00', 'film' => 1],
             ['id' => 69, 'hall' => 1, 'year' => 2020, 'month' => 11, 'day' => 5, 'time' => '16:00', 'film' => 1],
