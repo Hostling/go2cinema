@@ -51,19 +51,19 @@ class DatabaseSeeder extends Seeder
         DB::table('seatsconfig')->insertOrIgnore(createSeats2Hall(7, 12, 2));
 
         // Генерим места в 2 залах
-        $hall1Seats = generateSeats(10, 8, 1, 1);
-        $hall1Seats2 = generateSeats(10, 8, 1, 2);
-        $hall1Seats3 = generateSeats(10, 8, 1,3);
-        $hall1Seats4 = generateSeats(10, 8, 1,4);
-        $hall1Seats5 = generateSeats(10, 8, 1,5);
-        $hall1Seats6 = generateSeats(10, 8, 1,6);
-        $hall1Seats7 = generateSeats(10, 8, 1,7);
-        $hall1Seats8 = generateSeats(10, 8, 1,8);
-        $hall2Seats = generateSeats(7, 12, 2,9);
-        $hall2Seats2 = generateSeats(7, 12, 2,10);
-        $hall2Seats3 = generateSeats(7, 12, 2,11);
-        $hall2Seats4 = generateSeats(7, 12, 2,12);
-        $hall2Seats5 = generateSeats(7, 12, 2,13);
+        $hall1Seats0 = generateSeats(10, 8, 1, 1);
+        $hall1Seats20 = generateSeats(10, 8, 1, 2);
+        $hall1Seats30 = generateSeats(10, 8, 1,3);
+        $hall1Seats40 = generateSeats(10, 8, 1,4);
+        $hall1Seats50 = generateSeats(10, 8, 1,5);
+        $hall1Seats60 = generateSeats(10, 8, 1,6);
+        $hall1Seats70 = generateSeats(10, 8, 1,7);
+        $hall1Seats80 = generateSeats(10, 8, 1,8);
+        $hall2Seats0 = generateSeats(7, 12, 2,9);
+        $hall2Seats20 = generateSeats(7, 12, 2,10);
+        $hall2Seats30 = generateSeats(7, 12, 2,11);
+        $hall2Seats40 = generateSeats(7, 12, 2,12);
+        $hall2Seats50 = generateSeats(7, 12, 2,13);
 
         $hall1Seats1 = generateSeats(10, 8, 1, 14);
         $hall1Seats21 = generateSeats(10, 8, 1, 15);
@@ -135,19 +135,19 @@ class DatabaseSeeder extends Seeder
         $hall2Seats45 = generateSeats(7, 12, 2,77);
         $hall2Seats55 = generateSeats(7, 12, 2,78);
 
-        DB::table('seat')->insertOrIgnore($hall1Seats);
-        DB::table('seat')->insertOrIgnore($hall1Seats2);
-        DB::table('seat')->insertOrIgnore($hall1Seats3);
-        DB::table('seat')->insertOrIgnore($hall1Seats4);
-        DB::table('seat')->insertOrIgnore($hall1Seats5);
-        DB::table('seat')->insertOrIgnore($hall1Seats6);
-        DB::table('seat')->insertOrIgnore($hall1Seats7);
-        DB::table('seat')->insertOrIgnore($hall1Seats8);
-        DB::table('seat')->insertOrIgnore($hall2Seats);
-        DB::table('seat')->insertOrIgnore($hall2Seats2);
-        DB::table('seat')->insertOrIgnore($hall2Seats3);
-        DB::table('seat')->insertOrIgnore($hall2Seats4);
-        DB::table('seat')->insertOrIgnore($hall2Seats5);
+        DB::table('seat')->insertOrIgnore($hall1Seats0);
+        DB::table('seat')->insertOrIgnore($hall1Seats20);
+        DB::table('seat')->insertOrIgnore($hall1Seats30);
+        DB::table('seat')->insertOrIgnore($hall1Seats40);
+        DB::table('seat')->insertOrIgnore($hall1Seats50);
+        DB::table('seat')->insertOrIgnore($hall1Seats60);
+        DB::table('seat')->insertOrIgnore($hall1Seats70);
+        DB::table('seat')->insertOrIgnore($hall1Seats80);
+        DB::table('seat')->insertOrIgnore($hall2Seats0);
+        DB::table('seat')->insertOrIgnore($hall2Seats20);
+        DB::table('seat')->insertOrIgnore($hall2Seats30);
+        DB::table('seat')->insertOrIgnore($hall2Seats40);
+        DB::table('seat')->insertOrIgnore($hall2Seats50);
 
         DB::table('seat')->insertOrIgnore($hall1Seats1);
         DB::table('seat')->insertOrIgnore($hall1Seats21);
