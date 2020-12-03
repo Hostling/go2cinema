@@ -4,26 +4,29 @@ import {nanoid} from "nanoid";
 import Seat from './Seat';
 
 const HallPage = (props) => {
-    let seats = [];
     let tempHall = [];
     const [hall, setHall] = useState([]);
     const [rows, setRows] = useState([]);
     const [selected, setSelected] = useState([]);
     const [total, setTotal] = useState(0);
+    const [seats, setSeats] = useState([]);
     const params = props.location.state;
 
     useEffect(() => {
+        getInfo();
+    }, []);
+
+    useEffect(() => {
         async function load() {
-            await getInfo();
             await makeRows();
             await setRows(tempHall);
         }
-        load();
-    }, []);
+        if(seats.length !== 0) load();
+    }, [seats]);
 
     const getInfo = () => {
         axios.get( '/api/cinema/sessioninfo/' + params.gridId)
-            .then(response => seats = response.data);
+            .then(response => setSeats(response.data));
     }
 
     const handleClick = (e) => {
@@ -118,7 +121,7 @@ const HallPage = (props) => {
                         </div>
                     </div>
                 </div>
-                <button className="acceptin-button"><Link to={total === 0 ? null : {
+                <button className="acceptin-button"><Link to={{
                     pathname: "/payment",
                     state: {
                         name: params.name,

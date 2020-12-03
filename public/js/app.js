@@ -71002,7 +71002,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var HallPage = function HallPage(props) {
-  var seats = [];
   var tempHall = [];
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
@@ -71025,7 +71024,15 @@ var HallPage = function HallPage(props) {
       total = _useState8[0],
       setTotal = _useState8[1];
 
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      seats = _useState10[0],
+      setSeats = _useState10[1];
+
   var params = props.location.state;
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    getInfo();
+  }, []);
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     function load() {
       return _load.apply(this, arguments);
@@ -71038,17 +71045,13 @@ var HallPage = function HallPage(props) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return getInfo();
+                return makeRows();
 
               case 2:
                 _context.next = 4;
-                return makeRows();
-
-              case 4:
-                _context.next = 6;
                 return setRows(tempHall);
 
-              case 6:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -71058,12 +71061,12 @@ var HallPage = function HallPage(props) {
       return _load.apply(this, arguments);
     }
 
-    load();
-  }, []);
+    if (seats.length !== 0) load();
+  }, [seats]);
 
   var getInfo = function getInfo() {
     axios.get('/api/cinema/sessioninfo/' + params.gridId).then(function (response) {
-      return seats = response.data;
+      return setSeats(response.data);
     });
   };
 
@@ -71185,7 +71188,7 @@ var HallPage = function HallPage(props) {
   }), " \u0412\u044B\u0431\u0440\u0430\u043D\u043E")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     className: "acceptin-button"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-    to: total === 0 ? null : {
+    to: {
       pathname: "/payment",
       state: {
         name: params.name,
