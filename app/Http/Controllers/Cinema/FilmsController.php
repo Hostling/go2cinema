@@ -161,6 +161,9 @@ class FilmsController extends Controller
 
     public function getGrid() {
         return DB::table('grid')
+            ->where('year', "2020")
+            ->where('month', "10")
+            ->where('day', "30")
             ->orderBy('time')
             ->get();
     }
@@ -179,14 +182,56 @@ class FilmsController extends Controller
 
     public function addShowtime(Request $request) {
         DB::table('grid')
-            ->insertOrIgnore([
-                'hall' => $request->hall,
-                'year' => 2020,
-                'month' => 10,
-                'day' => 30,
-                'time' => $request->time,
-                'film' => $request->film
-            ]);
+            ->insertOrIgnore(
+                [
+                    'hall' => $request->hall,
+                    'year' => 2020,
+                    'month' => 10,
+                    'day' => 30,
+                    'time' => $request->time,
+                    'film' => $request->film
+                ],
+                [
+                    'hall' => $request->hall,
+                    'year' => 2020,
+                    'month' => 11,
+                    'day' => 1,
+                    'time' => $request->time,
+                    'film' => $request->film
+                ],
+                [
+                    'hall' => $request->hall,
+                    'year' => 2020,
+                    'month' => 11,
+                    'day' => 2,
+                    'time' => $request->time,
+                    'film' => $request->film
+                ],
+                [
+                    'hall' => $request->hall,
+                    'year' => 2020,
+                    'month' => 11,
+                    'day' => 3,
+                    'time' => $request->time,
+                    'film' => $request->film
+                ],
+                [
+                    'hall' => $request->hall,
+                    'year' => 2020,
+                    'month' => 11,
+                    'day' => 4,
+                    'time' => $request->time,
+                    'film' => $request->film
+                ],
+                [
+                    'hall' => $request->hall,
+                    'year' => 2020,
+                    'month' => 11,
+                    'day' => 5,
+                    'time' => $request->time,
+                    'film' => $request->film
+                ]
+            );
 
         $gridId = DB::table('grid')->max('id');
 
@@ -196,12 +241,44 @@ class FilmsController extends Controller
 
         foreach($seats as $seat) {
             DB::table('seat')
-                ->insertOrIgnore([
-                    "idInHall" => $seat->seatId,
-                    "hall" => $request->hall,
-                    "gridId" => $gridId,
-                    "type" => $seat->type
-                ]);
+                ->insertOrIgnore(
+                    [
+                        "idInHall" => $seat->seatId,
+                        "hall" => $request->hall,
+                        "gridId" => $gridId,
+                        "type" => $seat->type
+                    ],
+                    [
+                        "idInHall" => $seat->seatId,
+                        "hall" => $request->hall,
+                        "gridId" => $gridId - 1,
+                        "type" => $seat->type
+                    ],
+                    [
+                        "idInHall" => $seat->seatId,
+                        "hall" => $request->hall,
+                        "gridId" => $gridId - 2,
+                        "type" => $seat->type
+                    ],
+                    [
+                        "idInHall" => $seat->seatId,
+                        "hall" => $request->hall,
+                        "gridId" => $gridId - 3,
+                        "type" => $seat->type
+                    ],
+                    [
+                        "idInHall" => $seat->seatId,
+                        "hall" => $request->hall,
+                        "gridId" => $gridId - 4,
+                        "type" => $seat->type
+                    ],
+                    [
+                        "idInHall" => $seat->seatId,
+                        "hall" => $request->hall,
+                        "gridId" => $gridId - 5,
+                        "type" => $seat->type
+                    ]
+                );
         }
 
         return "Success";

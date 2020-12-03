@@ -1,8 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
-const Nav = () => {
+const Nav = ({today, setToday}) => {
     const [chosen, setChosen] = useState("2");
-    const today = "31";
+
+    useEffect(() => {
+        if(localStorage.getItem('today') === undefined) {
+            localStorage.setItem('today', "2");
+        }
+    });
 
     const days = [
         {num: "31", day: "Пн"},
@@ -13,6 +18,11 @@ const Nav = () => {
         {num: "5", day: "Сб"},
     ];
 
+    const changeDate = (day) => {
+        localStorage.setItem('today', day);
+        setToday(day);
+        setChosen(day);
+    }
 
     const generateClassName = (num, day) => {
         let name = "page-nav__day";
@@ -27,7 +37,8 @@ const Nav = () => {
             {days.map(item => (
                 <a className={generateClassName(item.num, item.day)}
                    href="#"
-                   onClick={() => setChosen(item.num)}
+                   key={item.num}
+                   onClick={() => changeDate(item.num)}
                 >
                     <span className="page-nav__day-week">{item.day}</span><span className="page-nav__day-number">{item.num}</span>
                 </a>

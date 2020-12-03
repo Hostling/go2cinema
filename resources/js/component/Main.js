@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header';
 import Nav from './Nav';
@@ -9,29 +9,30 @@ import Payment from "./Payment";
 import Ticket from "./Ticket";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
-class Main extends Component {
-    render() {
-        return (
-            <div>
-                <Router>
-                    <Header />
-                    <Switch>
-                        <Route path="/hall" component={HallPage} />
-                        <Route path="/payment" component={Payment} />
-                        <Route path="/ticket" component={Ticket} />
-                        <Route path="/admin" component={Admin} />
-                        <Route path="/">
-                            <Nav />
-                            <main>
-                                <Movies />
-                            </main>
-                        </Route>
-                    </Switch>
-                </Router>
-            </div>
-        );
-    }
+
+const Main = () => {
+    const [today, setToday] = useState("2");
+    return (
+        <div>
+            <Router>
+                <Header />
+                <Switch>
+                    <Route path="/hall" component={HallPage} />
+                    <Route path="/payment" component={Payment} />
+                    <Route path="/ticket" component={Ticket} />
+                    <Route path="/admin" component={Admin} />
+                    <Route path="/">
+                        <Nav today={today} setToday={setToday}/>
+                        <main>
+                            <Movies today={today} />
+                        </main>
+                    </Route>
+                </Switch>
+            </Router>
+        </div>
+    );
 }
+
 
 export default Main;
 
